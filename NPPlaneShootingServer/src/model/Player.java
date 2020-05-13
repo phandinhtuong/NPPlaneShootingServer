@@ -1,13 +1,13 @@
 package model;
 
 public class Player {
-	int playerID;
+	String playerID;
 
-	public int getPlayerID() {
+	public String getPlayerID() {
 		return playerID;
 	}
 
-	public void setPlayerID(int playerID) {
+	public void setPlayerID(String playerID) {
 		this.playerID = playerID;
 	}
 }

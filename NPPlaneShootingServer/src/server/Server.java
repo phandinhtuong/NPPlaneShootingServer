@@ -3,8 +3,6 @@ package server;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import testServer.TCPServer_for_one_client;
-
 public class Server {
 	public static void main(String[] args) throws Exception {
 		int tcp_port = 6789;
