@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -11,10 +12,10 @@ import model.Room;
 public class CreateNewRoom extends Thread{
 	Socket connectionSocket = null;
 	int cNumber;
-	BufferedReader inFromClient;
+	DataInputStream inFromClient;
 	DataOutputStream outToClient;
 	Player player;
-	public CreateNewRoom(Player p,Socket th,BufferedReader in,DataOutputStream out, int cn){
+	public CreateNewRoom(Player p,Socket th,DataInputStream in,DataOutputStream out, int cn){
 		connectionSocket = th;
 		cNumber = cn;
 		inFromClient = in;

@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,8 +20,7 @@ public class NewClientHome extends Thread {
 	public void run(){
 		try {
 			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-			BufferedReader inFromClient = new BufferedReader(
-					new InputStreamReader(connectionSocket.getInputStream()));
+			DataInputStream inFromClient = new DataInputStream(connectionSocket.getInputStream());
 			String playerID = connectionSocket.getInetAddress().getHostAddress() + ":" + connectionSocket.getPort();
 			Player player = new Player(playerID);
 			outToClient.writeBytes(playerID+'\n');
@@ -35,6 +35,10 @@ public class NewClientHome extends Thread {
 				}
 				
 				if(clientSentence.equals("l")){
+					System.out.println(clientSentence);
+					ListRoom listRoom = new ListRoom(outToClient);
+					listRoom.start();
+					break;
 					
 					
 				}
