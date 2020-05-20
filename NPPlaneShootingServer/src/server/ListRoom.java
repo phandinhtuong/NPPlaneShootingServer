@@ -18,22 +18,18 @@ public class ListRoom extends Thread{
 	public void run(){
 		try {
 			outToClient.writeInt(Serialize.serialize(Server.roomList).length);
-			System.out.println(Serialize.serialize(Server.roomList).length);
+			//System.out.println(Serialize.serialize(Server.roomList).length);
 			outToClient.write(Serialize.serialize(Server.roomList));
-			System.out.println(Arrays.toString(Serialize.serialize(Server.roomList)));
+			//System.out.println(Arrays.toString(Serialize.serialize(Server.roomList)));
 			
-			RoomList newRoomList;
-			newRoomList = Deserialize.deserialize(Serialize.serialize(Server.roomList));
-			System.out.println(Server.roomList.get(0).getRoomID());
-			System.out.println(newRoomList.get(0).getRoomID());
+//			RoomList newRoomList;
+//			newRoomList = Deserialize.deserializeRoomList(Serialize.serialize(Server.roomList));
+//			System.out.println(Server.roomList.get(0).getRoomID());
+//			System.out.println(newRoomList.get(0).getRoomID());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//outToClient.
- catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 }

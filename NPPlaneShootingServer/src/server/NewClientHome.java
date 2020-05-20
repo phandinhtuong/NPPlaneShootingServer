@@ -44,7 +44,7 @@ public class NewClientHome extends Thread {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("  thread " + cNumber + ": something happen in communication with client");
+			System.out.println("NewClientHome  thread " + cNumber + ": something happen in communication with client");
 			e.printStackTrace();
 		}
 	}
