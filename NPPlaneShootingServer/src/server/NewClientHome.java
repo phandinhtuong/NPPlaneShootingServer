@@ -36,7 +36,7 @@ public class NewClientHome extends Thread {
 				
 				if(clientSentence.equals("l")){
 					System.out.println(clientSentence);
-					ListRoom listRoom = new ListRoom(outToClient);
+					ListRoom listRoom = new ListRoom(inFromClient,outToClient);
 					listRoom.start();
 					break;
 					

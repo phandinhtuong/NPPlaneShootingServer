@@ -19,7 +19,14 @@ public class Room  implements Serializable{
 	public void updatePlayer(Player player){
 		//TODO
 		//System.out.println(this.playerList.indexOf(player));
-		this.playerList.get(this.playerList.indexOf(player)).setStatus(player.getStatus());
+		//this.playerList.get(this.playerList.indexOf(player)).setStatus(player.getStatus());
+		int i = 0;
+		for(i=0;i<playerList.size();i++){
+			if (playerList.get(i).getPlayerID().equals(player.getPlayerID())){
+				playerList.get(i).setStatus(player.getStatus());
+				break;
+			}
+		}
 	}
 	
 	public Room(String roomID,Player hostPlayer){
