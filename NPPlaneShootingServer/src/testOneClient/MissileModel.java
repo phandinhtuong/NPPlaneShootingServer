@@ -7,13 +7,29 @@ public class MissileModel implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	int playerID;
 	int ID;
 	int x;
 	int y;
-	public MissileModel(int ID, int x, int y){
+	String status;
+	public MissileModel(int playerID, int ID, int x, int y, String status){
+		this.playerID = playerID;
 		this.ID = ID;
 		this.x = x;
 		this.y = y;
+		this.status = status;
+	}
+	public int getPlayerID() {
+		return playerID;
+	}
+	public void setPlayerID(int playerID) {
+		this.playerID = playerID;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public int getID() {
 		return ID;
