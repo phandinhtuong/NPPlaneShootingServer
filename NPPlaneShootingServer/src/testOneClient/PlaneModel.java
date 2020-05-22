@@ -7,13 +7,21 @@ public class PlaneModel implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	int ID;
 	String status;
 	int x;
 	int y;
-	public PlaneModel(int x, int y,String status){
+	public PlaneModel(int ID, int x, int y, String status){
+		this.ID = ID;
 		this.status = status;
 		this.x = x;
 		this.y = y;
+	}
+	public int getID() {
+		return ID;
+	}
+	public void setID(int iD) {
+		ID = iD;
 	}
 	public String getStatus() {
 		return status;

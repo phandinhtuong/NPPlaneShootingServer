@@ -35,24 +35,27 @@ public class ServeOneClient extends Thread{
 					byte[] planeModelFromClientInByte = new byte[i];
 					inFromClient.read(planeModelFromClientInByte);
 					PlaneModel planeModelFromClient = deserializePlaneModel(planeModelFromClientInByte);
-					MultipleClientServer.planeModelList[cNumber] = planeModelFromClient;
-					System.out.println("client "+cNumber+ " status: "+planeModelFromClient.getStatus()+" : "+planeModelFromClient.getX()+" "+planeModelFromClient.getY());
+					MultipleClientServer.planeModelList[planeModelFromClient.getID()] = planeModelFromClient;
+					//System.out.println("client "+planeModelFromClient.getID()+ " status: "+planeModelFromClient.getStatus()+" : "+planeModelFromClient.getX()+" "+planeModelFromClient.getY());
+					i = 0;
 					break;
 				case 2:
 					i=inFromClient.readInt();
 					byte[] missileModelFromClientInByte = new byte[i];
 					inFromClient.read(missileModelFromClientInByte);
 					MissileModel missileModelFromClient = deserializeMissileModel(missileModelFromClientInByte);
-					System.out.println("client "+cNumber+" missile "+missileModelFromClient.getID()+" "+missileModelFromClient.getX()+" "+missileModelFromClient.getY()+" status "+missileModelFromClient.getStatus());
-					MultipleClientServer.missileModelList[cNumber][missileModelFromClient.getID()] = missileModelFromClient;
+					System.out.println("client "+missileModelFromClient.getPlayerID()+" missile "+missileModelFromClient.getID()+" "+missileModelFromClient.getX()+" "+missileModelFromClient.getY()+" status "+missileModelFromClient.getStatus());
+					MultipleClientServer.missileModelList[missileModelFromClient.getPlayerID()][missileModelFromClient.getID()] = missileModelFromClient;
+					i = 0;
 					break;
 				case 3:
 					i=inFromClient.readInt();
 					byte[] enemyModelFromClientInByte = new byte[i];
 					inFromClient.read(enemyModelFromClientInByte);
 					EnemyModel enemyModelFromClient = deserializeEnemyModel(enemyModelFromClientInByte);
-					MultipleClientServer.enemyModelList[cNumber][enemyModelFromClient.getID()] = enemyModelFromClient;
-					System.out.println("enemy "+enemyModelFromClient.getID()+" from client "+cNumber+" status "+enemyModelFromClient.getStatus());
+					MultipleClientServer.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient.getID()] = enemyModelFromClient;
+					System.out.println("enemy "+enemyModelFromClient.getID()+" from client "+enemyModelFromClient.getPlayerID()+" status "+enemyModelFromClient.getStatus());
+					i = 0;
 					break;
 				case 4:
 					byte[] planeModelListInByte = serialize(MultipleClientServer.planeModelList);
@@ -64,22 +67,21 @@ public class ServeOneClient extends Thread{
 					byte[] enemyModelListInByte = serialize(MultipleClientServer.enemyModelList);
 					outToClient.writeInt(enemyModelListInByte.length);
 					outToClient.write(enemyModelListInByte);
+					i = 0;
 					break;
 				default:
 					break;
 				}
 			}
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			//e.printStackTrace();
 			System.out.println("connection to client "+cNumber+" closed.");
+			MultipleClientServer.planeModelList[cNumber].setStatus("disconnected");
 			try {
 				connectionSocket.close();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
