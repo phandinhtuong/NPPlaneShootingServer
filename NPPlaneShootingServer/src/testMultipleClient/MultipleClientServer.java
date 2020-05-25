@@ -27,12 +27,17 @@ public class MultipleClientServer {
 				enemyModelList[j][i] = new EnemyModel(0, 0, 0, "ready");
 			}
 		}
+		ServerUI ser = new ServerUI();
+		
 		while(true) {
-			System.out.println("TCP Server port: " + tcp_port);
+			//System.out.println("TCP Server port: " + tcp_port);
+			ServerUI.displayGameLog("TCP Server port: " + tcp_port);
 			Socket connectionSocket = welcomeSocket.accept();
-			System.out.println("cNumber = "+cNumber);
+		//	System.out.println("cNumber = "+cNumber);
+			ServerUI.displayGameLog("cNumber = "+cNumber);
 			planeModelList[cNumber].setStatus("playing");
-			System.out.println("client connect from: " + connectionSocket.getInetAddress().getHostAddress() + ":" + connectionSocket.getPort());
+			//System.out.println("client connect from: " + connectionSocket.getInetAddress().getHostAddress() + ":" + connectionSocket.getPort());
+			ServerUI.displayGameLog("client connect from: " + connectionSocket.getInetAddress().getHostAddress() + ":" + connectionSocket.getPort());
 			DataInputStream inFromClient = new DataInputStream(connectionSocket.getInputStream());
 			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 			outToClient.writeInt(cNumber);

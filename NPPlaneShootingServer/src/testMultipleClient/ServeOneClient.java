@@ -44,7 +44,8 @@ public class ServeOneClient extends Thread{
 					byte[] missileModelFromClientInByte = new byte[i];
 					inFromClient.read(missileModelFromClientInByte);
 					MissileModel missileModelFromClient = deserializeMissileModel(missileModelFromClientInByte);
-					System.out.println("client "+missileModelFromClient.getPlayerID()+" missile "+missileModelFromClient.getID()+" "+missileModelFromClient.getX()+" "+missileModelFromClient.getY()+" status "+missileModelFromClient.getStatus());
+				//	System.out.println("client "+missileModelFromClient.getPlayerID()+" missile "+missileModelFromClient.getID()+" "+missileModelFromClient.getX()+" "+missileModelFromClient.getY()+" status "+missileModelFromClient.getStatus());
+					ServerUI.displayGameLog("client "+missileModelFromClient.getPlayerID()+" missile "+missileModelFromClient.getID()+" "+missileModelFromClient.getX()+" "+missileModelFromClient.getY()+" status "+missileModelFromClient.getStatus());
 					MultipleClientServer.missileModelList[missileModelFromClient.getPlayerID()][missileModelFromClient.getID()] = missileModelFromClient;
 					i = 0;
 					break;
@@ -54,7 +55,8 @@ public class ServeOneClient extends Thread{
 					inFromClient.read(enemyModelFromClientInByte);
 					EnemyModel enemyModelFromClient = deserializeEnemyModel(enemyModelFromClientInByte);
 					MultipleClientServer.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient.getID()] = enemyModelFromClient;
-					System.out.println("enemy "+enemyModelFromClient.getID()+" from client "+enemyModelFromClient.getPlayerID()+" status "+enemyModelFromClient.getStatus());
+					//System.out.println("enemy "+enemyModelFromClient.getID()+" from client "+enemyModelFromClient.getPlayerID()+" status "+enemyModelFromClient.getStatus());
+					ServerUI.displayGameLog("enemy "+enemyModelFromClient.getID()+" from client "+enemyModelFromClient.getPlayerID()+" status "+enemyModelFromClient.getStatus());
 					i = 0;
 					break;
 				case 4:
@@ -77,7 +79,8 @@ public class ServeOneClient extends Thread{
 			e.printStackTrace();
 		} catch (IOException e) {
 			//e.printStackTrace();
-			System.out.println("connection to client "+cNumber+" closed.");
+			//System.out.println("connection to client "+cNumber+" closed.");
+			ServerUI.displayGameLog("connection to client "+cNumber+" closed.");
 			MultipleClientServer.planeModelList[cNumber].setStatus("disconnected");
 			try {
 				connectionSocket.close();
