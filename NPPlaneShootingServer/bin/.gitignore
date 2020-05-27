@@ -3,3 +3,5 @@
 /objectByteTransform/
 /testOneClient/
 /testMultipleClient/
+/testMultipleClientGraphicOnClient/
+/testMultipleClientGraphicOnServer/

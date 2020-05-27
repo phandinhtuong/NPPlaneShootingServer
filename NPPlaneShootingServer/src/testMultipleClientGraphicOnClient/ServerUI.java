@@ -1,4 +1,4 @@
-package testMultipleClient;
+package testMultipleClientGraphicOnClient;
 
 import java.awt.EventQueue;
 import java.awt.Font;

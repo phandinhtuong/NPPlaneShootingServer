@@ -1,4 +1,4 @@
-package testMultipleClient;
+package testMultipleClientGraphicOnServer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,7 +9,7 @@ import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
 import testOneClient.PlaneModel;
 
-public class MultipleClientServer {
+public class Server {
 	static int numberOfPlayers = 3;
 	static int numberOfMissile = 100; //number of missile for each player
 	static int numberOfEnemyPlane = 100; //number of enemies for each player

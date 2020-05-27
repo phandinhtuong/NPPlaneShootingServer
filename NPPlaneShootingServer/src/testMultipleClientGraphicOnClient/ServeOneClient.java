@@ -1,4 +1,4 @@
-package testMultipleClient;
+package testMultipleClientGraphicOnClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
