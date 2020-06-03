@@ -24,7 +24,7 @@ public class MultipleClientServer {
 			planeModelList[j] = new PlaneModel(j,500, 500, "waiting");
 			for (int i = 0; i < numberOfMissile; i++) {
 				missileModelList[j][i] = new MissileModel(0, 0, 0, 0, "ready");
-				enemyModelList[j][i] = new EnemyModel(0, 0, 0, "ready");
+				enemyModelList[j][i] = new EnemyModel(0, 0, 0,0, "ready");
 			}
 		}
 		ServerUI ser = new ServerUI();

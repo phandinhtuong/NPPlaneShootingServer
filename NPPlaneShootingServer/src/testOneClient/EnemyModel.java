@@ -10,12 +10,22 @@ public class EnemyModel implements Serializable {
 	int playerID;
 	int ID;
 	int x;
+	int y;
 	String status;
-	public EnemyModel(int playerID, int ID, int x,String status) {
+	public EnemyModel(int playerID, int ID, int x,int y,String status) {
 		this.playerID = playerID;
 		this.ID = ID;
 		this.x = x;
+		this.y = y;
 		this.status = status;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 	public int getPlayerID() {
