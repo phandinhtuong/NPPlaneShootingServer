@@ -57,11 +57,11 @@ public class ServeOneClient extends Thread {
 
 					// System.out.println("client "+planeModelFromClient.getID()+
 					// " status: "+planeModelFromClient.getStatus()+" : "+planeModelFromClient.getX()+" "+planeModelFromClient.getY());
-					ServerUI.displayGameLog("client "
-							+ planeModelFromClient.getID() + " status: "
-							+ planeModelFromClient.getStatus() + " : "
-							+ planeModelFromClient.getX() + " "
-							+ planeModelFromClient.getY());
+//					ServerUI.displayGameLog("client "
+//							+ planeModelFromClient.getID() + " status: "
+//							+ planeModelFromClient.getStatus() + " : "
+//							+ planeModelFromClient.getX() + " "
+//							+ planeModelFromClient.getY());
 					i = 0;
 					break;
 				case 2:
