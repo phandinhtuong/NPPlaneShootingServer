@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import testOneClient.EnemyModel;
+import testOneClient.MissileModel;
+import testOneClient.PlaneModel;
 import model.Player;
 import model.Room;
 import model.RoomList;
@@ -28,5 +31,39 @@ public class Deserialize {
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 	    ObjectInputStream is = new ObjectInputStream(in);
 	    return (Room) is.readObject();
+	}
+	public static PlaneModel deserializePlaneModel(byte[] data)
+			throws IOException, ClassNotFoundException {
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ObjectInputStream is = new ObjectInputStream(in);
+		return (PlaneModel) is.readObject();
+	}
+
+	public static PlaneModel[] deserializePlaneModelList(byte[] data)
+			throws IOException, ClassNotFoundException {
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ObjectInputStream is = new ObjectInputStream(in);
+		return (PlaneModel[]) is.readObject();
+	}
+
+	public static MissileModel deserializeMissileModel(byte[] data)
+			throws IOException, ClassNotFoundException {
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ObjectInputStream is = new ObjectInputStream(in);
+		return (MissileModel) is.readObject();
+	}
+
+	public static MissileModel[][] deserializeMissileModelList(byte[] data)
+			throws IOException, ClassNotFoundException {
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ObjectInputStream is = new ObjectInputStream(in);
+		return (MissileModel[][]) is.readObject();
+	}
+
+	public static EnemyModel deserializeEnemyModel(byte[] data)
+			throws IOException, ClassNotFoundException {
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ObjectInputStream is = new ObjectInputStream(in);
+		return (EnemyModel) is.readObject();
 	}
 }

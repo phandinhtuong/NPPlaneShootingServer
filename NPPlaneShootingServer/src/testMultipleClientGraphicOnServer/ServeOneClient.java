@@ -3,17 +3,15 @@ package testMultipleClientGraphicOnServer;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import javax.swing.Timer;
 
+import objectByteTransform.Deserialize;
+import objectByteTransform.Serialize;
 import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
 import testOneClient.PlaneModel;
@@ -32,19 +30,29 @@ public class ServeOneClient extends Thread {
 		cNumber = cn;
 	}
 
+	int numberOfPlayers = 3;
+	int planeWidth = 86;
+	int planeHeight = 84;
+	int enemyWidth = 58;
+	int enemyHeight = 57;
+	int numberOfEnemyPlane = 100;
+	int clientFrameWidth = 930;
+	int clientFrameHeight = 992;
 	public void run() {
 		int i = 0;
 		try {
+			createEnemy();
 			while ((i = inFromClient.readInt()) != 0) {
 				switch (i) {
 				case 1:
 					i = inFromClient.readInt();
 					byte[] planeModelFromClientInByte = new byte[i];
 					inFromClient.read(planeModelFromClientInByte);
-					PlaneModel planeModelFromClient = deserializePlaneModel(planeModelFromClientInByte);
-					Server.planeModelList[planeModelFromClient.getID()]
+					PlaneModel planeModelFromClient = Deserialize
+							.deserializePlaneModel(planeModelFromClientInByte);
+					Server.modelPlaneList[planeModelFromClient.getID()]
 							.setX(planeModelFromClient.getX());
-					Server.planeModelList[planeModelFromClient.getID()]
+					Server.modelPlaneList[planeModelFromClient.getID()]
 							.setY(planeModelFromClient.getY());
 
 					// System.out.println("client "+planeModelFromClient.getID()+
@@ -60,7 +68,8 @@ public class ServeOneClient extends Thread {
 					i = inFromClient.readInt();
 					byte[] missileModelFromClientInByte = new byte[i];
 					inFromClient.read(missileModelFromClientInByte);
-					MissileModel missileModelFromClient = deserializeMissileModel(missileModelFromClientInByte);
+					MissileModel missileModelFromClient = Deserialize
+							.deserializeMissileModel(missileModelFromClientInByte);
 					// System.out.println("client "+missileModelFromClient.getPlayerID()+" missile "+missileModelFromClient.getID()+" "+missileModelFromClient.getX()+" "+missileModelFromClient.getY()+" status "+missileModelFromClient.getStatus());
 					ServerUI.displayGameLog("client "
 							+ missileModelFromClient.getPlayerID()
@@ -78,7 +87,8 @@ public class ServeOneClient extends Thread {
 					i = inFromClient.readInt();
 					byte[] enemyModelFromClientInByte = new byte[i];
 					inFromClient.read(enemyModelFromClientInByte);
-					EnemyModel enemyModelFromClient = deserializeEnemyModel(enemyModelFromClientInByte);
+					EnemyModel enemyModelFromClient = Deserialize
+							.deserializeEnemyModel(enemyModelFromClientInByte);
 					Server.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient
 							.getID()] = enemyModelFromClient;
 					// System.out.println("enemy "+enemyModelFromClient.getID()+" from client "+enemyModelFromClient.getPlayerID()+" status "+enemyModelFromClient.getStatus());
@@ -93,7 +103,8 @@ public class ServeOneClient extends Thread {
 					i = 0;
 					break;
 				case 4:
-					byte[] planeModelListInByte = serialize(Server.planeModelList);
+					byte[] planeModelListInByte = Serialize
+							.serialize(Server.modelPlaneList);
 					outToClient.writeInt(planeModelListInByte.length);
 					outToClient.write(planeModelListInByte);
 					// byte[] missileModelListInByte =
@@ -107,13 +118,15 @@ public class ServeOneClient extends Thread {
 					i = 0;
 					break;
 				case 5:
-					byte[] missileModelListInByte = serialize(Server.missileModelList);
+					byte[] missileModelListInByte = Serialize
+							.serialize(Server.missileModelList);
 					outToClient.writeInt(missileModelListInByte.length);
 					outToClient.write(missileModelListInByte);
 					i = 0;
 					break;
 				case 6:
-					byte[] enemyModelListInByte = serialize(Server.enemyModelList);
+					byte[] enemyModelListInByte = Serialize
+							.serialize(Server.enemyModelList);
 					outToClient.writeInt(enemyModelListInByte.length);
 					outToClient.write(enemyModelListInByte);
 					i = 0;
@@ -129,7 +142,7 @@ public class ServeOneClient extends Thread {
 			// System.out.println("connection to client "+cNumber+" closed.");
 			ServerUI.displayGameLog("connection to client " + cNumber
 					+ " closed.");
-			Server.planeModelList[cNumber].setStatus("disconnected");
+			Server.modelPlaneList[cNumber].setStatus("disconnected");
 			try {
 				connectionSocket.close();
 			} catch (IOException e1) {
@@ -137,7 +150,28 @@ public class ServeOneClient extends Thread {
 			}
 		}
 	}
+	public void createEnemy() {
+		int delay = 2000;
+		ActionListener taskPerformer = new ActionListener() {
+			int count = 0;
 
+			public void actionPerformed(ActionEvent evt) {
+				if (count == numberOfEnemyPlane
+						|| Server.modelPlaneList[cNumber].getStatus().equals("dead")) {
+					((Timer) evt.getSource()).stop();
+				} else {
+					Server.enemyModelList[cNumber][count] = new EnemyModel(cNumber, count,
+							(int) (Math.random() * (clientFrameWidth
+									- enemyWidth - 1)) + 1,-enemyHeight,
+							"created");
+					enemyPlaneMove(cNumber, count);
+				}
+				count++;
+			}
+		};
+		Timer t = new Timer(delay, taskPerformer);
+		t.start();
+	}
 	private void enemyPlaneMove(final int playerID, final int enemyID) {
 		int delay = 10;
 		ActionListener taskPerformer = new ActionListener() {
@@ -145,7 +179,6 @@ public class ServeOneClient extends Thread {
 			int enemyPlaneY = 0;// initial y of enemy
 			int k = -1;
 
-			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent evt) {
 				if (Server.enemyModelList[playerID][enemyID].getStatus()
 						.equals("dead")) {
@@ -153,60 +186,28 @@ public class ServeOneClient extends Thread {
 					((Timer) evt.getSource()).stop();
 					return;
 				} else {
-					enemyPlaneY = count - 57;// speed
-					// if ((k = checkCollisionListEnemyPlanes(
-					// enemyModelList[j][i].getX(), enemyPlaneY,
-					// lblEnemyList[j][i].getWidth(),
-					// lblEnemyList[j][i].getHeight())) != -1) {
-					// // update dead player
-					// String oldStatus = modelPlaneLocal.getStatus();
-					// modelPlaneLocal.setID(k);
-					// modelPlaneLocal.setStatus("dead");
-					// updateLocalPlaneToServer();
-					// modelPlaneLocal.setID(myPlayerID);
-					// modelPlaneLocal.setStatus(oldStatus);
-					// modelPlaneList[k].setStatus("dead");
-					//
-					// lblEnemyList[j][i].setVisible(false);
-					// modelEnemyLocal.setID(i);
-					// modelEnemyLocal.setPlayerID(j);
-					// modelEnemyLocal.setStatus("dead");
-					// updateLocalEnemyToServer();
-					// ((Timer) evt.getSource()).stop();
-					// return;
-					//
-					// }
-					// if
-					// (checkCollisionListEnemyPlanes(modelEnemyLocal.getX(),
-					// enemyPlaneY, lblEnemyList[j][i].getWidth(),
-					// lblEnemyList[j][i].getHeight())!=-1) {
-					// modelPlaneLocal.setStatus("Died");
-					// updateLocalPlaneToServer();
-					// // lblPlaneList[myPlayerIndex]
-					// // allPlayers[myPlayerIndex].setVisible(false);
-					// // TODO
-					// lblYouDie.setVisible(true);
-					// frame.setCursor(Cursor.DEFAULT_CURSOR);
-					// displayGameLog("you ded by enemy plane index " +
-					// i
-					// + " of player " + j);
-					// }
+					enemyPlaneY = count - enemyHeight;// speed
+					if ((k = checkCollisionListEnemyPlanes(
+							Server.enemyModelList[playerID][enemyID].getX(),
+							enemyPlaneY, enemyWidth, enemyHeight)) != -1) {
+						// update dead player
 
-					if (enemyPlaneY >= 1080// - lblEnemyList[j][i].getHeight()
-					) {
-						// modelEnemyLocal.setPlayerID(j);
-						// modelEnemyLocal.setID(i);
-						// modelEnemyLocal.setStatus("dead");
+						Server.modelPlaneList[k].setStatus("dead");
+						ServerUI.displayGameLog("Player "+cNumber+" died!");
 						Server.enemyModelList[playerID][enemyID]
 								.setStatus("dead");
-						// updateLocalEnemyToServer();
-						// allEnemies[j][i].setVisible(false);
+						((Timer) evt.getSource()).stop();
+						return;
+
+					}
+					if (enemyPlaneY >= clientFrameHeight// - lblEnemyList[j][i].getHeight()
+					) {
+
+						Server.enemyModelList[playerID][enemyID]
+								.setStatus("dead");
 						((Timer) evt.getSource()).stop();
 						return;
 					} else {
-						// lblEnemyList[j][i].setVisible(true);
-						// lblEnemyList[j][i].move(modelEnemyList[j][i].getX(),
-						// enemyPlaneY);
 						Server.enemyModelList[playerID][enemyID]
 								.setY(enemyPlaneY);
 					}
@@ -217,6 +218,28 @@ public class ServeOneClient extends Thread {
 		Timer t = new Timer(delay, taskPerformer);
 		t.start();
 
+	}
+
+	public int checkCollisionListEnemyPlanes(int x, int y, int width, int height) {
+		for (int i = 0; i < numberOfPlayers; i++) {
+			if (Server.modelPlaneList[i].getStatus().equals("playing")) {
+				if (checkOneCollisionEnemyPlane(x, y, width, height, i))
+					return i;
+			}
+		}
+		return -1;
+	}
+
+	public boolean checkOneCollisionEnemyPlane(int x, int y, int width,
+			int height, int playerIndex) {
+		Rectangle a = new Rectangle(x, y, width, height);
+		Rectangle b = new Rectangle(Server.modelPlaneList[playerIndex].getX(),
+				Server.modelPlaneList[playerIndex].getY(), planeWidth,
+				planeHeight);
+		if (a.intersects(b))
+			return true;
+		else
+			return false;
 	}
 
 	public static void launchOneMissile(final int playerID, final int missileID) {
@@ -232,7 +255,6 @@ public class ServeOneClient extends Thread {
 			int enemyPlaneListIndexDie = -1; // dead enemy index
 			int k = 0;
 
-			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent evt) {
 				if (Server.missileModelList[playerID][missileID].getStatus()
 						.equals("dead")) {
@@ -279,8 +301,8 @@ public class ServeOneClient extends Thread {
 									+ enemyPlaneListIndexDie);
 							enemyPlaneListIndexDie = -1;
 						}
-//						ServerUI.displayGameLog("enemyPlaneListIndexDie = "
-//								+ enemyPlaneListIndexDie);
+						// ServerUI.displayGameLog("enemyPlaneListIndexDie = "
+						// + enemyPlaneListIndexDie);
 						// modelMissileLocal.setPlayerID(j);
 						// modelMissileLocal.setID(i);
 						// modelMissileLocal.setStatus("dead");
@@ -330,87 +352,6 @@ public class ServeOneClient extends Thread {
 			return true;
 		else
 			return false;
-	}
-
-	public static byte[] serialize(PlaneModel[] planeModelList)
-			throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(planeModelList);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(PlaneModel planeModel) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(planeModel);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(MissileModel missileModel)
-			throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(missileModel);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(MissileModel[][] missileModelList)
-			throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(missileModelList);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(EnemyModel enemyModel) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(enemyModel);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(EnemyModel[][] enemyModelList)
-			throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(enemyModelList);
-		return out.toByteArray();
-	}
-
-	public static PlaneModel deserializePlaneModel(byte[] data)
-			throws IOException, ClassNotFoundException {
-		ByteArrayInputStream in = new ByteArrayInputStream(data);
-		ObjectInputStream is = new ObjectInputStream(in);
-		return (PlaneModel) is.readObject();
-	}
-
-	public static PlaneModel[] deserializePlaneModelList(byte[] data)
-			throws IOException, ClassNotFoundException {
-		ByteArrayInputStream in = new ByteArrayInputStream(data);
-		ObjectInputStream is = new ObjectInputStream(in);
-		return (PlaneModel[]) is.readObject();
-	}
-
-	public static MissileModel deserializeMissileModel(byte[] data)
-			throws IOException, ClassNotFoundException {
-		ByteArrayInputStream in = new ByteArrayInputStream(data);
-		ObjectInputStream is = new ObjectInputStream(in);
-		return (MissileModel) is.readObject();
-	}
-
-	public static MissileModel[][] deserializeMissileModelList(byte[] data)
-			throws IOException, ClassNotFoundException {
-		ByteArrayInputStream in = new ByteArrayInputStream(data);
-		ObjectInputStream is = new ObjectInputStream(in);
-		return (MissileModel[][]) is.readObject();
-	}
-
-	public static EnemyModel deserializeEnemyModel(byte[] data)
-			throws IOException, ClassNotFoundException {
-		ByteArrayInputStream in = new ByteArrayInputStream(data);
-		ObjectInputStream is = new ObjectInputStream(in);
-		return (EnemyModel) is.readObject();
 	}
 
 }
