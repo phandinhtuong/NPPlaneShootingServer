@@ -32,13 +32,10 @@ public class Server {
 		ServerUI ser = new ServerUI();
 		
 		while(true) {
-			//System.out.println("TCP Server port: " + tcp_port);
 			ServerUI.displayGameLog("TCP Server port: " + tcp_port);
-			Socket connectionSocket = welcomeSocket.accept();
-		//	System.out.println("cNumber = "+cNumber);
+			Socket connectionSocket = welcomeSocket.accept(); // accept connection from client
 			ServerUI.displayGameLog("cNumber = "+cNumber);
-			modelPlaneList[cNumber].setStatus("playing");
-			//System.out.println("client connect from: " + connectionSocket.getInetAddress().getHostAddress() + ":" + connectionSocket.getPort());
+			modelPlaneList[cNumber].setStatus("playing"); //set this player status playing
 			ServerUI.displayGameLog("client connect from: " + connectionSocket.getInetAddress().getHostAddress() + ":" + connectionSocket.getPort());
 			DataInputStream inFromClient = new DataInputStream(connectionSocket.getInputStream());
 			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
