@@ -1,4 +1,4 @@
-package testMultipleClientGraphicOnClient;
+package directPlaying.testMultipleClientGraphicOnServer;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -6,6 +6,8 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
+
 import java.awt.Color;
 
 public class ServerUI {
@@ -44,7 +46,7 @@ public class ServerUI {
 		//frmPlaneShootingServer.setBackground(Color.WHITE);
 		frmPlaneShootingServer.getContentPane().setBackground(Color.WHITE);
 		frmPlaneShootingServer.setTitle("Plane Shooting Server");
-		frmPlaneShootingServer.setBounds(100, 100, 973, 554);
+		frmPlaneShootingServer.setBounds(100, 100, 975, 648);
 		frmPlaneShootingServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameLog.setBackground(Color.WHITE);
 		
@@ -56,10 +58,13 @@ public class ServerUI {
 		// game log
 		gameLog.setEditable(false);
 		gameLog.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		 DefaultCaret caret = (DefaultCaret)gameLog.getCaret();
+		 caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		JScrollPane scrollPaneGameLog = new JScrollPane();
 		scrollPaneGameLog.setViewportView(gameLog);
-		scrollPaneGameLog.setBounds(0, 0, 900, 100);
+		scrollPaneGameLog.setBounds(0, 0, 951, 498);
 		scrollPaneGameLog.getViewport().setOpaque(false);
+		frmPlaneShootingServer.getContentPane().setLayout(null);
 		scrollPaneGameLog.setOpaque(false);
 		frmPlaneShootingServer.getContentPane().add(scrollPaneGameLog);
 		frmPlaneShootingServer.setVisible(true);

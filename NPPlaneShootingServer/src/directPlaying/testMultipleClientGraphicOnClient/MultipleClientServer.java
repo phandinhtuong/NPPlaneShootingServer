@@ -1,4 +1,4 @@
-package testMultipleClientGraphicOnClient;
+package directPlaying.testMultipleClientGraphicOnClient;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

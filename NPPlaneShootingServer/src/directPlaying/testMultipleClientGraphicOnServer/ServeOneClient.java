@@ -1,4 +1,4 @@
-package testMultipleClientGraphicOnServer;
+package directPlaying.testMultipleClientGraphicOnServer;
 
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;

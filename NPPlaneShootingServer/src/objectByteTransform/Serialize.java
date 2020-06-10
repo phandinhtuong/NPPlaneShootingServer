@@ -3,6 +3,7 @@ package objectByteTransform;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
@@ -74,5 +75,16 @@ public class Serialize {
 		ObjectOutputStream os = new ObjectOutputStream(out);
 		os.writeObject(enemyModelList);
 		return out.toByteArray();
+	}
+	public static byte[] serialize(ArrayList<PlaneModel> modelPlaneList){
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(out);
+			os.writeObject(modelPlaneList);
+			return out.toByteArray();
+		} catch (IOException e) {
+//			Client.displayGameLog(e.getMessage());
+			return null;
+		}
 	}
 }

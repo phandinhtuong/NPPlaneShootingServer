@@ -1,10 +1,12 @@
-package testMultipleClientGraphicOnServer;
+package directPlaying.refactorDataStructure;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
+import objectByteTransform.Deserialize;
 import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
 import testOneClient.PlaneModel;
@@ -13,7 +15,11 @@ public class Server {
 	static int numberOfPlayers = 3;
 	static int numberOfMissile = 100; //number of missile for each player
 	static int numberOfEnemyPlane = 100; //number of enemies for each player
-	public static PlaneModel modelPlaneList[] = new PlaneModel[numberOfPlayers];
+	
+	static ArrayList<PlaneModel> modelPlaneList = new ArrayList<PlaneModel>();
+//	public static PlaneModel modelPlaneList[] = new PlaneModel[numberOfPlayers];
+	
+	
 	public static MissileModel missileModelList[][] = new MissileModel[numberOfPlayers][numberOfMissile];
 	public static EnemyModel enemyModelList[][] = new EnemyModel[numberOfPlayers][numberOfEnemyPlane];
 	public static void main(String[] args) throws Exception {
@@ -22,7 +28,11 @@ public class Server {
 		ServerSocket welcomeSocket = new ServerSocket(tcp_port);
 		int cNumber = 0;
 		for (int j = 0; j<numberOfPlayers;j++){
-			modelPlaneList[j] = new PlaneModel(j,500, 500, "waiting");
+			
+			//Initial modelPlaneList
+//			modelPlaneList[j] = new PlaneModel(j,500, 500, "waiting");
+			
+			
 			for (int i = 0; i < numberOfMissile; i++) {
 				missileModelList[j][i] = new MissileModel(0, 0, 0, 0, "ready");
 				enemyModelList[j][i] = new EnemyModel(0, 0, 0,0, "ready");
@@ -35,10 +45,27 @@ public class Server {
 			ServerUI.displayGameLog("TCP Server port: " + tcp_port);
 			Socket connectionSocket = welcomeSocket.accept(); // accept connection from client
 			ServerUI.displayGameLog("cNumber = "+cNumber);
-			modelPlaneList[cNumber].setStatus("playing"); //set this player status playing
+			
+			
+//			planeModel = new PlaneModel(cNumber, 500, 500, "playing");
+//			modelPlaneList.add(planeModel); // add this plane to plane list
+//			modelPlaneList[cNumber].setStatus("playing"); //set this player status playing
+			
 			ServerUI.displayGameLog("client connect from: " + connectionSocket.getInetAddress().getHostAddress() + ":" + connectionSocket.getPort());
 			DataInputStream inFromClient = new DataInputStream(connectionSocket.getInputStream());
 			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+			int i = 0;
+			while ((i = inFromClient.readInt()) != 0) {
+				i = inFromClient.readInt();
+				byte[] planeModelFromClientInByte = new byte[i];
+				inFromClient.read(planeModelFromClientInByte);
+				PlaneModel planeModelFromClient = Deserialize
+						.deserializePlaneModel(planeModelFromClientInByte);
+				ServerUI.displayGameLog("cNumber = "+cNumber);
+				planeModelFromClient.setID(cNumber);
+				modelPlaneList.add(planeModelFromClient);
+				break;
+			}
 			outToClient.writeInt(cNumber);
 			
 			ServeOneClient serveOneClient = new ServeOneClient(connectionSocket, cNumber, inFromClient, outToClient);

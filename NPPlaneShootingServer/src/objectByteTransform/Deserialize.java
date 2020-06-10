@@ -3,6 +3,7 @@ package objectByteTransform;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
@@ -65,5 +66,12 @@ public class Deserialize {
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		ObjectInputStream is = new ObjectInputStream(in);
 		return (EnemyModel) is.readObject();
+	}
+	public static ArrayList<PlaneModel> deserializePlaneModelArrayList(byte[] data) throws IOException, ClassNotFoundException{
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		
+			ObjectInputStream is = new ObjectInputStream(in);
+			return (ArrayList<PlaneModel>) is.readObject();
+		
 	}
 }
