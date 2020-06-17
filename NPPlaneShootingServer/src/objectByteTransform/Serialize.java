@@ -76,14 +76,23 @@ public class Serialize {
 		os.writeObject(enemyModelList);
 		return out.toByteArray();
 	}
-	public static byte[] serialize(ArrayList<PlaneModel> modelPlaneList){
+	public static byte[] serializePlaneModelList(ArrayList<PlaneModel> modelPlaneList){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
 			os.writeObject(modelPlaneList);
 			return out.toByteArray();
 		} catch (IOException e) {
-//			Client.displayGameLog(e.getMessage());
+			return null;
+		}
+	}
+	public static byte[] serializeMissileModelList(ArrayList<MissileModel> modelMissileList){
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(out);
+			os.writeObject(modelMissileList);
+			return out.toByteArray();
+		} catch (IOException e) {
 			return null;
 		}
 	}

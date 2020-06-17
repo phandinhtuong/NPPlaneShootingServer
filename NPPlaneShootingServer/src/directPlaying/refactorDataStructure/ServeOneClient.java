@@ -41,7 +41,7 @@ public class ServeOneClient extends Thread {
 	public void run() {
 		int i = 0;
 		try {
-			createEnemy();
+//			createEnemy();
 			while ((i = inFromClient.readInt()) != 0) {
 				switch (i) {
 				case 1:
@@ -50,8 +50,8 @@ public class ServeOneClient extends Thread {
 					inFromClient.read(planeModelFromClientInByte);
 					PlaneModel planeModelFromClient = Deserialize
 							.deserializePlaneModel(planeModelFromClientInByte);
-					Server.modelPlaneList.get(Server.modelPlaneList.indexOf(planeModelFromClient)).setX(planeModelFromClient.getX());
-					Server.modelPlaneList.get(Server.modelPlaneList.indexOf(planeModelFromClient)).setY(planeModelFromClient.getY());
+					Server.modelPlaneList.get(planeModelFromClient.getID()).setX(planeModelFromClient.getX());
+					Server.modelPlaneList.get(planeModelFromClient.getID()).setY(planeModelFromClient.getY());
 
 //					Server.modelPlaneList[planeModelFromClient.getID()]
 //							.setX(planeModelFromClient.getX());
@@ -71,40 +71,40 @@ public class ServeOneClient extends Thread {
 							+ " " + missileModelFromClient.getX() + " "
 							+ missileModelFromClient.getY() + " status "
 							+ missileModelFromClient.getStatus());
-					Server.missileModelList[missileModelFromClient
-							.getPlayerID()][missileModelFromClient.getID()] = missileModelFromClient;
-					launchOneMissile(missileModelFromClient.getPlayerID(),
-							missileModelFromClient.getID());
+					
+					Server.missileModelList.add(missileModelFromClient);
+					
+					launchOneMissile(missileModelFromClient);
 					i = 0;
 					break;
-				case 3:
-					i = inFromClient.readInt();
-					byte[] enemyModelFromClientInByte = new byte[i];
-					inFromClient.read(enemyModelFromClientInByte);
-					EnemyModel enemyModelFromClient = Deserialize
-							.deserializeEnemyModel(enemyModelFromClientInByte);
-					Server.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient
-							.getID()] = enemyModelFromClient;
-					ServerUI.displayGameLog("enemy "
-							+ enemyModelFromClient.getID() + " from client "
-							+ enemyModelFromClient.getPlayerID() + " status "
-							+ enemyModelFromClient.getStatus());
-					Server.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient
-							.getID()] = enemyModelFromClient;
-					enemyMove(enemyModelFromClient.getPlayerID(),
-							enemyModelFromClient.getID());
-					i = 0;
-					break;
+//				case 3:
+//					i = inFromClient.readInt();
+//					byte[] enemyModelFromClientInByte = new byte[i];
+//					inFromClient.read(enemyModelFromClientInByte);
+//					EnemyModel enemyModelFromClient = Deserialize
+//							.deserializeEnemyModel(enemyModelFromClientInByte);
+//					Server.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient
+//							.getID()] = enemyModelFromClient;
+//					ServerUI.displayGameLog("enemy "
+//							+ enemyModelFromClient.getID() + " from client "
+//							+ enemyModelFromClient.getPlayerID() + " status "
+//							+ enemyModelFromClient.getStatus());
+//					Server.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient
+//							.getID()] = enemyModelFromClient;
+//					enemyMove(enemyModelFromClient.getPlayerID(),
+//							enemyModelFromClient.getID());
+//					i = 0;
+//					break;
 				case 4:
 					byte[] planeModelListInByte = Serialize
-							.serialize(Server.modelPlaneList);
+							.serializePlaneModelList(Server.modelPlaneList);
 					outToClient.writeInt(planeModelListInByte.length);
 					outToClient.write(planeModelListInByte);
 					i = 0;
 					break;
 				case 5:
 					byte[] missileModelListInByte = Serialize
-							.serialize(Server.missileModelList);
+							.serializeMissileModelList(Server.missileModelList);
 					outToClient.writeInt(missileModelListInByte.length);
 					outToClient.write(missileModelListInByte);
 					i = 0;
@@ -232,12 +232,12 @@ public class ServeOneClient extends Thread {
 			return false;
 	}
 
-	public static void launchOneMissile(final int playerID, final int missileID) {
+	public static void launchOneMissile(final MissileModel missileModel) {
 		int delay = 100;
-		Server.missileModelList[playerID][missileID].setStatus("launched");
+		Server.missileModelList.get(Server.missileModelList.indexOf(missileModel)).setStatus("launched");
 		ActionListener taskPerformer = new ActionListener() {
 			int count = 0;
-			int missileX = Server.missileModelList[playerID][missileID].getX(); // x
+			int missileX = Server.missileModelList.get(Server.missileModelList.indexOf(missileModel)).getX(); // x
 																				// does
 																				// not
 																				// change
@@ -246,54 +246,56 @@ public class ServeOneClient extends Thread {
 			int k = 0;
 
 			public void actionPerformed(ActionEvent evt) {
-				if (Server.missileModelList[playerID][missileID].getStatus()
+				if (Server.missileModelList.get(Server.missileModelList.indexOf(missileModel)).getStatus()
 						.equals("dead")) {
 					ServerUI.displayGameLog("playerID:"
-							+ playerID
+							+ missileModel.getPlayerID()
 							+ " missileID:"
-							+ missileID
+							+ missileModel.getID()
 							+ " x:"
-							+ Server.missileModelList[playerID][missileID]
+							+ Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
 									.getX()
 							+ " y:"
-							+ Server.missileModelList[playerID][missileID]
+							+ Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
 									.getY() + " dead");
 					// lblMissileList[j][i].setVisible(false);
 					((Timer) evt.getSource()).stop();
 					return;
 				} else {
 					// y change with speed
-					missileY = Server.missileModelList[playerID][missileID]
+					missileY = Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
 							.getY() - 5 * count;
-					for (k = 0; k < Server.numberOfPlayers; k++) {
-						enemyPlaneListIndexDie = checkCollisionListMissileEnemies(
-								missileX, missileY, 26, 26, k);
-						if (enemyPlaneListIndexDie != -1)
-							break;
-					}
+					//TODO
+//					for (k = 0; k < Server.numberOfPlayers; k++) {
+//						enemyPlaneListIndexDie = checkCollisionListMissileEnemies(
+//								missileX, missileY, 26, 26, k);
+//						if (enemyPlaneListIndexDie != -1)
+//							break;
+//					}
 
 					if (count == 1080 || missileY < 15
 							|| (enemyPlaneListIndexDie != -1)) {
 						// missile kills enemy
 						if (enemyPlaneListIndexDie != -1) {
-							Server.missileModelList[playerID][missileID]
+							Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
 									.setStatus("dead");
 							Server.enemyModelList[k][enemyPlaneListIndexDie]
 									.setStatus("dead");
 							ServerUI.displayGameLog("missileIndex = "
-									+ missileID
+									+ missileModel.getID()
 									+ " destroyed enemyPlaneListIndex = "
 									+ enemyPlaneListIndexDie);
 							enemyPlaneListIndexDie = -1;
 						}
-						Server.missileModelList[playerID][missileID]
+						Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
 								.setStatus("dead");
+//						Server.missileModelList.remove(Server.missileModelList.indexOf(missileModel));
 						((Timer) evt.getSource()).stop();
 						return;
 					} else {
-						Server.missileModelList[playerID][missileID]
+						Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
 								.setX(missileX);
-						Server.missileModelList[playerID][missileID]
+						Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
 								.setY(missileY);
 					}
 					count++;
