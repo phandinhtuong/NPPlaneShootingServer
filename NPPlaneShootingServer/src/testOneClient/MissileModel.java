@@ -2,8 +2,6 @@ package testOneClient;
 
 import java.io.Serializable;
 
-import javax.swing.JLabel;
-
 public class MissileModel implements Serializable{
 	/**
 	 * 
@@ -14,7 +12,6 @@ public class MissileModel implements Serializable{
 	int x;
 	int y;
 	String status;
-	JLabel lblMissile;
 	public MissileModel(int playerID, int ID, int x, int y, String status){
 		this.playerID = playerID;
 		this.ID = ID;
@@ -54,12 +51,6 @@ public class MissileModel implements Serializable{
 	}
 	public void setY(int y) {
 		this.y = y;
-	}
-	public JLabel getLblMissile() {
-		return lblMissile;
-	}
-	public void setLblMissile(JLabel lblMissile) {
-		this.lblMissile = lblMissile;
 	}
 
 }

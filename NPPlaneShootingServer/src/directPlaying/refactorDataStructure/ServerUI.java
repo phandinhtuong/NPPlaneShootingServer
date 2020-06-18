@@ -46,7 +46,7 @@ public class ServerUI {
 		//frmPlaneShootingServer.setBackground(Color.WHITE);
 		frmPlaneShootingServer.getContentPane().setBackground(Color.WHITE);
 		frmPlaneShootingServer.setTitle("Plane Shooting Server");
-		frmPlaneShootingServer.setBounds(100, 100, 975, 648);
+		frmPlaneShootingServer.setBounds(950, 100, 975, 648);
 		frmPlaneShootingServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameLog.setBackground(Color.WHITE);
 		

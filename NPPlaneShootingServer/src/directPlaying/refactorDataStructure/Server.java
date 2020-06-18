@@ -6,7 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import objectByteTransform.Deserialize;
 import objectByteTransform.Serialize;
 import testOneClient.EnemyModel;
 import testOneClient.MissileModel;

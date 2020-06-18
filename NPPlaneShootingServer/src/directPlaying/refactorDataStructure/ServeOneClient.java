@@ -1,18 +1,12 @@
 package directPlaying.refactorDataStructure;
 
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import javax.swing.Timer;
-
 import objectByteTransform.Deserialize;
 import objectByteTransform.Serialize;
-import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
 import testOneClient.PlaneModel;
 
@@ -31,13 +25,13 @@ public class ServeOneClient extends Thread {
 	}
 
 	int numberOfPlayers = Server.numberOfPlayers;
-	int planeWidth = 86;
-	int planeHeight = 84;
+	static int planeWidth = 86;
+	static int planeHeight = 84;
 	static int enemyWidth = 58;
 	static int enemyHeight = 57;
 	int numberOfEnemyPlane = 100;
-	int clientFrameWidth = 930;
-	int clientFrameHeight = 992;
+	static int clientFrameWidth = 930;
+	static int clientFrameHeight = 992;
 	public void run() {
 		int i = 0;
 		try {
@@ -74,7 +68,7 @@ public class ServeOneClient extends Thread {
 					
 					Server.missileModelList.add(missileModelFromClient);
 					
-					launchOneMissile(missileModelFromClient);
+					LaunchMissile.launchMissile(missileModelFromClient);
 					i = 0;
 					break;
 //				case 3:
@@ -142,196 +136,15 @@ public class ServeOneClient extends Thread {
 		}
 		return -1;
 	}
-	public void createEnemy() {
-		int delay = 2000;
-		ActionListener taskPerformer = new ActionListener() {
-			int count = 0;
+	
+	
 
-			public void actionPerformed(ActionEvent evt) {
-				if (count == numberOfEnemyPlane
-						|| Server.modelPlaneList.get(indexOfPlaneWithID(cNumber)).getStatus().equals("dead")) {
-					((Timer) evt.getSource()).stop();
-				} else {
-					Server.enemyModelList[cNumber][count] = new EnemyModel(cNumber, count,
-							(int) (Math.random() * (clientFrameWidth
-									- enemyWidth - 1)) + 1,-enemyHeight,
-							"created");
-					enemyMove(cNumber, count);
-				}
-				count++;
-			}
-		};
-		Timer t = new Timer(delay, taskPerformer);
-		t.start();
-	}
-	private void enemyMove(final int playerID, final int enemyID) {
-		int delay = 10;
-		ActionListener taskPerformer = new ActionListener() {
-			int count = 0;
-			int enemyPlaneY = 0;// initial y of enemy
-			int k = -1;
+	
 
-			public void actionPerformed(ActionEvent evt) {
-				if (Server.enemyModelList[playerID][enemyID].getStatus()
-						.equals("dead")) {
-					((Timer) evt.getSource()).stop();
-					return;
-				} else {
-					enemyPlaneY = count - enemyHeight;// speed
-					if ((k = checkCollisionListEnemyPlanes(
-							Server.enemyModelList[playerID][enemyID].getX(),
-							enemyPlaneY, enemyWidth, enemyHeight)) != -1) {
-						// update dead player
-						Server.modelPlaneList.get(indexOfPlaneWithID(k)).setStatus("dead");
-						ServerUI.displayGameLog("Player "+cNumber+" died!");
-						Server.enemyModelList[playerID][enemyID]
-								.setStatus("dead");
-						((Timer) evt.getSource()).stop();
-						return;
+	
 
-					}
-					if (enemyPlaneY >= clientFrameHeight
-					) {
+	
 
-						Server.enemyModelList[playerID][enemyID]
-								.setStatus("dead");
-						((Timer) evt.getSource()).stop();
-						return;
-					} else {
-						Server.enemyModelList[playerID][enemyID]
-								.setY(enemyPlaneY);
-					}
-					count++;
-				}
-			}
-		};
-		Timer t = new Timer(delay, taskPerformer);
-		t.start();
-
-	}
-
-	public int checkCollisionListEnemyPlanes(int x, int y, int width, int height) {
-		for (int i = 0; i < numberOfPlayers; i++) {
-			if (Server.modelPlaneList.get(indexOfPlaneWithID(i)).getStatus().equals("playing")) {
-				if (checkOneCollisionEnemyPlane(x, y, width, height, i))
-					return i;
-			}
-		}
-		return -1;
-	}
-
-	public boolean checkOneCollisionEnemyPlane(int x, int y, int width,
-			int height, int playerIndex) {
-		Rectangle a = new Rectangle(x, y, width, height);
-		Rectangle b = new Rectangle(Server.modelPlaneList.get(indexOfPlaneWithID(playerIndex)).getX(),
-				Server.modelPlaneList.get(indexOfPlaneWithID(playerIndex)).getY(), planeWidth,
-				planeHeight);
-		if (a.intersects(b))
-			return true;
-		else
-			return false;
-	}
-
-	public static void launchOneMissile(final MissileModel missileModel) {
-		int delay = 100;
-		Server.missileModelList.get(Server.missileModelList.indexOf(missileModel)).setStatus("launched");
-		ActionListener taskPerformer = new ActionListener() {
-			int count = 0;
-			int missileX = Server.missileModelList.get(Server.missileModelList.indexOf(missileModel)).getX(); // x
-																				// does
-																				// not
-																				// change
-			int missileY = 0;
-			int enemyPlaneListIndexDie = -1; // dead enemy index
-			int k = 0;
-
-			public void actionPerformed(ActionEvent evt) {
-				if (Server.missileModelList.get(Server.missileModelList.indexOf(missileModel)).getStatus()
-						.equals("dead")) {
-					ServerUI.displayGameLog("playerID:"
-							+ missileModel.getPlayerID()
-							+ " missileID:"
-							+ missileModel.getID()
-							+ " x:"
-							+ Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
-									.getX()
-							+ " y:"
-							+ Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
-									.getY() + " dead");
-					// lblMissileList[j][i].setVisible(false);
-					((Timer) evt.getSource()).stop();
-					return;
-				} else {
-					// y change with speed
-					missileY = Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
-							.getY() - 5 * count;
-					//TODO
-//					for (k = 0; k < Server.numberOfPlayers; k++) {
-//						enemyPlaneListIndexDie = checkCollisionListMissileEnemies(
-//								missileX, missileY, 26, 26, k);
-//						if (enemyPlaneListIndexDie != -1)
-//							break;
-//					}
-
-					if (count == 1080 || missileY < 15
-							|| (enemyPlaneListIndexDie != -1)) {
-						// missile kills enemy
-						if (enemyPlaneListIndexDie != -1) {
-							Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
-									.setStatus("dead");
-							Server.enemyModelList[k][enemyPlaneListIndexDie]
-									.setStatus("dead");
-							ServerUI.displayGameLog("missileIndex = "
-									+ missileModel.getID()
-									+ " destroyed enemyPlaneListIndex = "
-									+ enemyPlaneListIndexDie);
-							enemyPlaneListIndexDie = -1;
-						}
-						Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
-								.setStatus("dead");
-//						Server.missileModelList.remove(Server.missileModelList.indexOf(missileModel));
-						((Timer) evt.getSource()).stop();
-						return;
-					} else {
-						Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
-								.setX(missileX);
-						Server.missileModelList.get(Server.missileModelList.indexOf(missileModel))
-								.setY(missileY);
-					}
-					count++;
-				}
-			}
-		};
-		Timer t = new Timer(delay, taskPerformer);
-		t.start();
-	}
-
-	public static int checkCollisionListMissileEnemies(int x, int y, int width,
-			int height, int enemyPlayerIndex) {
-		for (int i = 0; i < Server.enemyModelList[enemyPlayerIndex].length; i++) {
-			if (Server.enemyModelList[enemyPlayerIndex][i].getStatus().equals(
-					"created")) {
-				if (checkOneCollisionMissileEnemy(x, y, width, height,
-						enemyPlayerIndex, i)) {
-					return i;
-				}
-			}
-
-		}
-		return -1;
-	}
-
-	public static boolean checkOneCollisionMissileEnemy(int x, int y,
-			int width, int height, int enemyPlayerIndex, int enemyListIndex) {
-		Rectangle a = new Rectangle(x, y, width, height);
-		Rectangle b = new Rectangle(
-				Server.enemyModelList[enemyPlayerIndex][enemyListIndex].getX(),
-				Server.enemyModelList[enemyPlayerIndex][enemyListIndex].getY(),
-				enemyWidth, enemyHeight);
-		if (a.intersects(b))
-			return true;
-		else
-			return false;
-	}
+	
 
 }
