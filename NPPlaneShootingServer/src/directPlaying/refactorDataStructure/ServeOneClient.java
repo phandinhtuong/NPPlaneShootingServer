@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import objectByteTransform.Deserialize;
 import objectByteTransform.Serialize;
+import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
 import testOneClient.PlaneModel;
 
@@ -35,7 +36,7 @@ public class ServeOneClient extends Thread {
 	public void run() {
 		int i = 0;
 		try {
-//			createEnemy();
+			CreateEnemy.createEnemy(cNumber);
 			while ((i = inFromClient.readInt()) != 0) {
 				switch (i) {
 				case 1:
@@ -66,29 +67,11 @@ public class ServeOneClient extends Thread {
 							+ missileModelFromClient.getY() + " status "
 							+ missileModelFromClient.getStatus());
 					
-					Server.missileModelList.add(missileModelFromClient);
+					Server.modelMissileList.add(missileModelFromClient);
 					
-					LaunchMissile.launchMissile(missileModelFromClient);
+					MissileMove.missileMove(missileModelFromClient);
 					i = 0;
 					break;
-//				case 3:
-//					i = inFromClient.readInt();
-//					byte[] enemyModelFromClientInByte = new byte[i];
-//					inFromClient.read(enemyModelFromClientInByte);
-//					EnemyModel enemyModelFromClient = Deserialize
-//							.deserializeEnemyModel(enemyModelFromClientInByte);
-//					Server.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient
-//							.getID()] = enemyModelFromClient;
-//					ServerUI.displayGameLog("enemy "
-//							+ enemyModelFromClient.getID() + " from client "
-//							+ enemyModelFromClient.getPlayerID() + " status "
-//							+ enemyModelFromClient.getStatus());
-//					Server.enemyModelList[enemyModelFromClient.getPlayerID()][enemyModelFromClient
-//							.getID()] = enemyModelFromClient;
-//					enemyMove(enemyModelFromClient.getPlayerID(),
-//							enemyModelFromClient.getID());
-//					i = 0;
-//					break;
 				case 4:
 					byte[] planeModelListInByte = Serialize
 							.serializePlaneModelList(Server.modelPlaneList);
@@ -98,14 +81,14 @@ public class ServeOneClient extends Thread {
 					break;
 				case 5:
 					byte[] missileModelListInByte = Serialize
-							.serializeMissileModelList(Server.missileModelList);
+							.serializeMissileModelList(Server.modelMissileList);
 					outToClient.writeInt(missileModelListInByte.length);
 					outToClient.write(missileModelListInByte);
 					i = 0;
 					break;
 				case 6:
 					byte[] enemyModelListInByte = Serialize
-							.serialize(Server.enemyModelList);
+							.serializeEnemyModelList(Server.modelEnemyList);
 					outToClient.writeInt(enemyModelListInByte.length);
 					outToClient.write(enemyModelListInByte);
 					i = 0;

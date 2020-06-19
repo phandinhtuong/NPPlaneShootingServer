@@ -21,10 +21,12 @@ public class Server {
 	
 	
 //	public static MissileModel missileModelList[][] = new MissileModel[numberOfPlayers][numberOfMissile];
-	static ArrayList<MissileModel> missileModelList = new ArrayList<MissileModel>();
+	static ArrayList<MissileModel> modelMissileList = new ArrayList<MissileModel>();
 	
 	
-	public static EnemyModel enemyModelList[][] = new EnemyModel[numberOfPlayers][numberOfEnemyPlane];
+//	public static EnemyModel enemyModelList[][] = new EnemyModel[numberOfPlayers][numberOfEnemyPlane];
+	static ArrayList<EnemyModel> modelEnemyList = new ArrayList<EnemyModel>();
+	
 	public static void main(String[] args) throws Exception {
 		int tcp_port = 6789;
 		@SuppressWarnings("resource")

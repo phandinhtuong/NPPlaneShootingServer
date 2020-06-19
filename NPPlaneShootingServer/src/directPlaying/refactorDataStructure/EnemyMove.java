@@ -6,43 +6,49 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import testOneClient.EnemyModel;
+
 public class EnemyMove {
-	public static void enemyMove(final int playerID, final int enemyID) {
-		int delay = 10;
+	public static void enemyMove(final EnemyModel enemyModel) {
+		int delay = 50;
 		ActionListener taskPerformer = new ActionListener() {
 			int count = 0;
 			int enemyPlaneY = 0;// initial y of enemy
 			int k = -1;
 
 			public void actionPerformed(ActionEvent evt) {
-				if (Server.enemyModelList[playerID][enemyID].getStatus()
+				
+				if (Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)).getStatus()
 						.equals("dead")) {
+					ServerUI.displayGameLog("Server.modelEnemyList.size() before = "+Server.modelEnemyList.size());
+					Server.modelEnemyList.remove(Server.modelEnemyList.indexOf(enemyModel));
+					ServerUI.displayGameLog("Server.modelEnemyList.size() after = "+Server.modelEnemyList.size());
 					((Timer) evt.getSource()).stop();
 					return;
 				} else {
-					enemyPlaneY = count - ServeOneClient.enemyHeight;// speed
+					enemyPlaneY = 5 * count - ServeOneClient.enemyHeight;// speed
 					if ((k = checkCollisionListEnemyPlanes(
-							Server.enemyModelList[playerID][enemyID].getX(),
-							enemyPlaneY, ServeOneClient.enemyWidth, ServeOneClient.enemyHeight)) != -1) {
+							Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)).getX(),
+							enemyPlaneY, ServeOneClient.enemyWidth,
+							ServeOneClient.enemyHeight)) != -1) {
 						// update dead player
-						Server.modelPlaneList.get(ServeOneClient.indexOfPlaneWithID(k)).setStatus("dead");
-//						ServerUI.displayGameLog("Player "+cNumber+" died!");
-						Server.enemyModelList[playerID][enemyID]
+						Server.modelPlaneList.get(
+								ServeOneClient.indexOfPlaneWithID(k))
 								.setStatus("dead");
-						((Timer) evt.getSource()).stop();
-						return;
+						// ServerUI.displayGameLog("Player "+cNumber+" died!");
+						Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)).setStatus("dead");
+//						((Timer) evt.getSource()).stop();
+//						return;
 
 					}
-					if (enemyPlaneY >= ServeOneClient.clientFrameHeight
-					) {
+					if (enemyPlaneY >= ServeOneClient.clientFrameHeight) {
 
-						Server.enemyModelList[playerID][enemyID]
-								.setStatus("dead");
-						((Timer) evt.getSource()).stop();
-						return;
+						Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)).setStatus("dead");
+//						((Timer) evt.getSource()).stop();
+//						return;
 					} else {
-						Server.enemyModelList[playerID][enemyID]
-								.setY(enemyPlaneY);
+						Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)).setStatus("moving");
+						Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)).setY(enemyPlaneY);
 					}
 					count++;
 				}
@@ -52,12 +58,24 @@ public class EnemyMove {
 		t.start();
 
 	}
-	public static int checkCollisionListEnemyPlanes(int x, int y, int width, int height) {
-		for (int i = 0; i < Server.numberOfPlayers; i++) {
-			if (Server.modelPlaneList.get(ServeOneClient.indexOfPlaneWithID(i)).getStatus().equals("playing")) {
-				if (checkOneCollisionEnemyPlane(x, y, width, height, i))
-					return i;
-			}
+
+	// public static int checkCollisionListEnemyPlanes(int x, int y, int width,
+	// int height) {
+	// for (int i = 0; i < Server.numberOfPlayers; i++) {
+	// if
+	// (Server.modelPlaneList.get(ServeOneClient.indexOfPlaneWithID(i)).getStatus().equals("playing"))
+	// {
+	// if (checkOneCollisionEnemyPlane(x, y, width, height, i))
+	// return i;
+	// }
+	// }
+	// return -1;
+	// }
+	public static int checkCollisionListEnemyPlanes(int x, int y, int width,
+			int height) {
+		for (int i = 0; i < Server.modelPlaneList.size(); i++) {
+			if (checkOneCollisionEnemyPlane(x, y, width, height, i))
+				return i;
 		}
 		return -1;
 	}
@@ -65,9 +83,11 @@ public class EnemyMove {
 	public static boolean checkOneCollisionEnemyPlane(int x, int y, int width,
 			int height, int playerIndex) {
 		Rectangle a = new Rectangle(x, y, width, height);
-		Rectangle b = new Rectangle(Server.modelPlaneList.get(ServeOneClient.indexOfPlaneWithID(playerIndex)).getX(),
-				Server.modelPlaneList.get(ServeOneClient.indexOfPlaneWithID(playerIndex)).getY(), ServeOneClient.planeWidth,
-				ServeOneClient.planeHeight);
+		Rectangle b = new Rectangle(Server.modelPlaneList.get(
+				ServeOneClient.indexOfPlaneWithID(playerIndex)).getX(),
+				Server.modelPlaneList.get(
+						ServeOneClient.indexOfPlaneWithID(playerIndex)).getY(),
+				ServeOneClient.planeWidth, ServeOneClient.planeHeight);
 		if (a.intersects(b))
 			return true;
 		else

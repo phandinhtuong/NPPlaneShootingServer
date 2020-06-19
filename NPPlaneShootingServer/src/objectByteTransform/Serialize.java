@@ -96,4 +96,14 @@ public class Serialize {
 			return null;
 		}
 	}
+	public static byte[] serializeEnemyModelList(ArrayList<EnemyModel> modelEnemyList){
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(out);
+			os.writeObject(modelEnemyList);
+			return out.toByteArray();
+		} catch (IOException e) {
+			return null;
+		}
+	}
 }
