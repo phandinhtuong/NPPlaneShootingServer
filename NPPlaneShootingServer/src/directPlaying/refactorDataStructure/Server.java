@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import directPlaying.testOneClient.EnemyModel;
+import directPlaying.testOneClient.EnemyNumber;
+import directPlaying.testOneClient.MissileModel;
+import directPlaying.testOneClient.PlaneModel;
 import objectByteTransform.Serialize;
-import testOneClient.EnemyModel;
-import testOneClient.EnemyNumber;
-import testOneClient.MissileModel;
-import testOneClient.PlaneModel;
 
 public class Server {
 	static int numberOfPlayers = 3;

@@ -9,9 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import testOneClient.EnemyModel;
-import testOneClient.MissileModel;
-import testOneClient.PlaneModel;
+import directPlaying.testOneClient.EnemyModel;
+import directPlaying.testOneClient.MissileModel;
+import directPlaying.testOneClient.PlaneModel;
 
 public class ServeOneClient extends Thread{
 	Socket connectionSocket = null;

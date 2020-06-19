@@ -5,9 +5,9 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import testOneClient.EnemyModel;
-import testOneClient.MissileModel;
-import testOneClient.PlaneModel;
+import directPlaying.testOneClient.EnemyModel;
+import directPlaying.testOneClient.MissileModel;
+import directPlaying.testOneClient.PlaneModel;
 
 public class MultipleClientServer {
 	static int numberOfPlayers = 3;

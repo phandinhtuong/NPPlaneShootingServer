@@ -10,11 +10,11 @@ import java.net.Socket;
 
 import javax.swing.Timer;
 
+import directPlaying.testOneClient.EnemyModel;
+import directPlaying.testOneClient.MissileModel;
+import directPlaying.testOneClient.PlaneModel;
 import objectByteTransform.Deserialize;
 import objectByteTransform.Serialize;
-import testOneClient.EnemyModel;
-import testOneClient.MissileModel;
-import testOneClient.PlaneModel;
 
 public class ServeOneClient extends Thread {
 	Socket connectionSocket = null;

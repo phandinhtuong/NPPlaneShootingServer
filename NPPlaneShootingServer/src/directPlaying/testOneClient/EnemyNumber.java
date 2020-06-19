@@ -1,4 +1,4 @@
-package testOneClient;
+package directPlaying.testOneClient;
 
 public class EnemyNumber {
 	int playerID;

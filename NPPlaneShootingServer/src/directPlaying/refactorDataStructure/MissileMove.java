@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import testOneClient.MissileModel;
+import directPlaying.testOneClient.MissileModel;
 
 public class MissileMove {
 	public static void missileMove(final MissileModel missileModel) {

@@ -1,12 +1,13 @@
-package server;
+package main;
 
 import java.io.DataInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import server.*;
 import model.RoomList;
 
-public class Server {
+public class Main {
 	static RoomList roomList = new RoomList();
 	public static void main(String[] args) throws Exception {
 		int tcp_port = 6789;

@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import testOneClient.EnemyModel;
-import testOneClient.EnemyNumber;
+import directPlaying.testOneClient.EnemyModel;
+import directPlaying.testOneClient.EnemyNumber;
 
 public class CreateEnemy {
 	public static void createEnemy(final int cNumber) {

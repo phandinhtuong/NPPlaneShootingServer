@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import testOneClient.EnemyModel;
+import directPlaying.testOneClient.EnemyModel;
 
 public class EnemyMove {
 	public static void enemyMove(final EnemyModel enemyModel) {
