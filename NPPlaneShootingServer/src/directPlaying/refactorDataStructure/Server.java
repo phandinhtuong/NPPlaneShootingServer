@@ -27,6 +27,7 @@ public class Server {
 //	public static EnemyModel enemyModelList[][] = new EnemyModel[numberOfPlayers][numberOfEnemyPlane];
 	static ArrayList<EnemyModel> modelEnemyList = new ArrayList<EnemyModel>();
 	
+	
 	public static void main(String[] args) throws Exception {
 		int tcp_port = 6789;
 		@SuppressWarnings("resource")
@@ -70,7 +71,7 @@ public class Server {
 			byte[] planeModelInByte = Serialize.serialize(modelPlaneLocal);
 			outToClient.writeInt(planeModelInByte.length); //
 			outToClient.write(planeModelInByte);
-			modelPlaneList.add(modelPlaneLocal);
+			addPlane(modelPlaneLocal);
 			
 //			while ((i = inFromClient.readInt()) != 0) {
 //				i = inFromClient.readInt();
@@ -90,6 +91,9 @@ public class Server {
 			
 			cNumber++;
 		}
+	}
+	public static synchronized void addPlane(PlaneModel modelPlaneLocal){
+		modelPlaneList.add(modelPlaneLocal);
 	}
 	
 }

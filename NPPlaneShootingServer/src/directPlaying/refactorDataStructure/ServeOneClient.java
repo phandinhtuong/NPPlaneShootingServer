@@ -67,7 +67,8 @@ public class ServeOneClient extends Thread {
 							+ missileModelFromClient.getY() + " status "
 							+ missileModelFromClient.getStatus());
 					
-					Server.modelMissileList.add(missileModelFromClient);
+					addMissile(missileModelFromClient);
+					
 					
 					MissileMove.missileMove(missileModelFromClient);
 					i = 0;
@@ -119,7 +120,9 @@ public class ServeOneClient extends Thread {
 		}
 		return -1;
 	}
-	
+	public static synchronized void addMissile(MissileModel missileModelFromClient){
+		Server.modelMissileList.add(missileModelFromClient);
+	}
 	
 
 	
