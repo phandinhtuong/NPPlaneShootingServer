@@ -17,8 +17,8 @@ import testOneClient.PlaneModel;
 public class Server {
 	static int numberOfPlayers = 3;
 //	static int numberOfMissiles = 100; //number of missile for each player
-	static int numberOfEnemies = 100; //number of enemies for each player
-	
+	static int numberOfEnemiesEachPlayer = 100; //number of enemies for each player
+	static int enemyIndexOfAllPlayers = 0;
 //	static ArrayList<PlaneModel> modelPlaneList = new ArrayList<PlaneModel>();
 ////	public static PlaneModel modelPlaneList[] = new PlaneModel[numberOfPlayers];
 //	

@@ -134,14 +134,20 @@ public class ServeOneClient extends Thread {
 		return -1;
 	}
 	private static int checkVictory(){
-		int count = 0;
-		for (int i = 0; i<Server.enemyListOfAllPlayers.size();i++){
-			if (Server.enemyListOfAllPlayers.get(i).getEnemyID() == Server.numberOfEnemies){
-				count++;
-			}
-		}
-		if (count == Server.enemyListOfAllPlayers.size() && Server.modelEnemyList.size()==0) return 1;
-		else return 2;
+//		int count = 0;
+//		for (int i = 0; i<Server.enemyListOfAllPlayers.size();i++){
+//			if (Server.enemyListOfAllPlayers.get(i).getEnemyID() == Server.numberOfEnemiesEachPlayer){
+//				count++;
+//			}
+//		}
+//		if (count == Server.enemyListOfAllPlayers.size() && Server.modelEnemyList.size()==0) return 1;
+//		else return 2;
+		if (Server.enemyIndexOfAllPlayers == Server.modelPlaneList.size() * Server.numberOfEnemiesEachPlayer && Server.modelEnemyList.size()==0){
+			return -1;
+		} else return Server.modelPlaneList.size() * Server.numberOfEnemiesEachPlayer - Server.enemyIndexOfAllPlayers + Server.modelEnemyList.size();
+//		for (int i = 0;i<Server.enemyListOfAllPlayers.size();i++){
+//			
+//		}
 //		return Server.enemyListOfAllPlayers.get(0).getEnemyID();
 //		return count;
 //		return Server.enemyListOfAllPlayers.size();
