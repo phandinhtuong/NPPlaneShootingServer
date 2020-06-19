@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import directPlaying.refactorDataStructure.Server;
 import testOneClient.EnemyModel;
 import testOneClient.MissileModel;
 import testOneClient.PlaneModel;
@@ -76,31 +77,37 @@ public class Serialize {
 		os.writeObject(enemyModelList);
 		return out.toByteArray();
 	}
-	public static byte[] serializePlaneModelList(ArrayList<PlaneModel> modelPlaneList){
+	public static byte[] serializePlaneModelList(){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
-			os.writeObject(modelPlaneList);
+			synchronized (Server.modelPlaneList) {
+				os.writeObject(Server.modelPlaneList);
+			}
 			return out.toByteArray();
 		} catch (IOException e) {
 			return null;
 		}
 	}
-	public static byte[] serializeMissileModelList(ArrayList<MissileModel> modelMissileList){
+	public static byte[] serializeMissileModelList(){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
-			os.writeObject(modelMissileList);
+			synchronized (Server.modelMissileList) {
+				os.writeObject(Server.modelMissileList);
+			}
 			return out.toByteArray();
 		} catch (IOException e) {
 			return null;
 		}
 	}
-	public static byte[] serializeEnemyModelList(ArrayList<EnemyModel> modelEnemyList){
+	public static byte[] serializeEnemyModelList(){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
-			os.writeObject(modelEnemyList);
+			synchronized (Server.modelEnemyList) {
+				os.writeObject(Server.modelEnemyList);
+			}
 			return out.toByteArray();
 		} catch (IOException e) {
 			return null;

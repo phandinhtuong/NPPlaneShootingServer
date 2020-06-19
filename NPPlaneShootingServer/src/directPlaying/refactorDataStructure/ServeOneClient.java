@@ -45,9 +45,14 @@ public class ServeOneClient extends Thread {
 					inFromClient.read(planeModelFromClientInByte);
 					PlaneModel planeModelFromClient = Deserialize
 							.deserializePlaneModel(planeModelFromClientInByte);
-					Server.modelPlaneList.get(planeModelFromClient.getID()).setX(planeModelFromClient.getX());
-					Server.modelPlaneList.get(planeModelFromClient.getID()).setY(planeModelFromClient.getY());
-
+					
+					synchronized (Server.modelPlaneList) {
+						Server.modelPlaneList.get(planeModelFromClient.getID()).setX(planeModelFromClient.getX());
+						Server.modelPlaneList.get(planeModelFromClient.getID()).setY(planeModelFromClient.getY());
+					}
+					
+					
+					
 //					Server.modelPlaneList[planeModelFromClient.getID()]
 //							.setX(planeModelFromClient.getX());
 //					Server.modelPlaneList[planeModelFromClient.getID()]
@@ -67,7 +72,10 @@ public class ServeOneClient extends Thread {
 							+ missileModelFromClient.getY() + " status "
 							+ missileModelFromClient.getStatus());
 					
-					addMissile(missileModelFromClient);
+					synchronized (Server.modelMissileList) {
+						Server.modelMissileList.add(missileModelFromClient);
+					}
+					
 					
 					
 					MissileMove.missileMove(missileModelFromClient);
@@ -75,21 +83,21 @@ public class ServeOneClient extends Thread {
 					break;
 				case 4:
 					byte[] planeModelListInByte = Serialize
-							.serializePlaneModelList(Server.modelPlaneList);
+							.serializePlaneModelList();
 					outToClient.writeInt(planeModelListInByte.length);
 					outToClient.write(planeModelListInByte);
 					i = 0;
 					break;
 				case 5:
 					byte[] missileModelListInByte = Serialize
-							.serializeMissileModelList(Server.modelMissileList);
+							.serializeMissileModelList();
 					outToClient.writeInt(missileModelListInByte.length);
 					outToClient.write(missileModelListInByte);
 					i = 0;
 					break;
 				case 6:
 					byte[] enemyModelListInByte = Serialize
-							.serializeEnemyModelList(Server.modelEnemyList);
+							.serializeEnemyModelList();
 					outToClient.writeInt(enemyModelListInByte.length);
 					outToClient.write(enemyModelListInByte);
 					i = 0;
@@ -120,9 +128,8 @@ public class ServeOneClient extends Thread {
 		}
 		return -1;
 	}
-	public static synchronized void addMissile(MissileModel missileModelFromClient){
-		Server.modelMissileList.add(missileModelFromClient);
-	}
+	
+	
 	
 
 	

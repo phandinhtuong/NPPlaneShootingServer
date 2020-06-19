@@ -23,7 +23,10 @@ public class CreateEnemy {
 									- ServeOneClient.enemyWidth - 1)) + 1,-ServeOneClient.enemyHeight,
 							"created");
 					ServerUI.displayGameLog("enemy created");
-					addEnemy(enemyModel);
+					synchronized (Server.modelEnemyList) {
+						Server.modelEnemyList.add(enemyModel);
+					}
+					
 					EnemyMove.enemyMove(Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)));
 				}
 				count++;
@@ -31,8 +34,5 @@ public class CreateEnemy {
 		};
 		Timer t = new Timer(delay, taskPerformer);
 		t.start();
-	}
-	public static synchronized void addEnemy(EnemyModel enemyModel){
-		Server.modelEnemyList.add(enemyModel);
 	}
 }

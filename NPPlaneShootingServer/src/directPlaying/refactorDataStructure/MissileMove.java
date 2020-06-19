@@ -44,8 +44,10 @@ public class MissileMove {
 											.indexOf(missileModel)).getY()
 							+ " dead");
 					// lblMissileList[j][i].setVisible(false);
-					removeMissile(Server.modelMissileList
-							.indexOf(missileModel));
+					synchronized (Server.modelMissileList) {
+						Server.modelMissileList.remove(Server.modelMissileList
+								.indexOf(missileModel));
+					}
 					
 					((Timer) evt.getSource()).stop();
 					return;
@@ -127,8 +129,5 @@ public class MissileMove {
 			return true;
 		else
 			return false;
-	}
-	public static synchronized void removeMissile(int index){
-		Server.modelMissileList.remove(index);
 	}
 }

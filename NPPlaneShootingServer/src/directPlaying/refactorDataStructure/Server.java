@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import objectByteTransform.Serialize;
 import testOneClient.EnemyModel;
@@ -16,17 +18,27 @@ public class Server {
 	static int numberOfMissile = 100; //number of missile for each player
 	static int numberOfEnemyPlane = 100; //number of enemies for each player
 	
-	static ArrayList<PlaneModel> modelPlaneList = new ArrayList<PlaneModel>();
+//	static ArrayList<PlaneModel> modelPlaneList = new ArrayList<PlaneModel>();
+////	public static PlaneModel modelPlaneList[] = new PlaneModel[numberOfPlayers];
+//	
+//	
+////	public static MissileModel missileModelList[][] = new MissileModel[numberOfPlayers][numberOfMissile];
+//	static ArrayList<MissileModel> modelMissileList = new ArrayList<MissileModel>();
+//	
+//	
+////	public static EnemyModel enemyModelList[][] = new EnemyModel[numberOfPlayers][numberOfEnemyPlane];
+//	static ArrayList<EnemyModel> modelEnemyList = new ArrayList<EnemyModel>();
+	
+	public static List<PlaneModel> modelPlaneList = Collections.synchronizedList(new ArrayList<PlaneModel>());
 //	public static PlaneModel modelPlaneList[] = new PlaneModel[numberOfPlayers];
 	
 	
 //	public static MissileModel missileModelList[][] = new MissileModel[numberOfPlayers][numberOfMissile];
-	static ArrayList<MissileModel> modelMissileList = new ArrayList<MissileModel>();
+	public static List<MissileModel> modelMissileList = Collections.synchronizedList(new ArrayList<MissileModel>());
 	
 	
 //	public static EnemyModel enemyModelList[][] = new EnemyModel[numberOfPlayers][numberOfEnemyPlane];
-	static ArrayList<EnemyModel> modelEnemyList = new ArrayList<EnemyModel>();
-	
+	public static List<EnemyModel> modelEnemyList = Collections.synchronizedList(new ArrayList<EnemyModel>());
 	
 	public static void main(String[] args) throws Exception {
 		int tcp_port = 6789;
@@ -71,7 +83,7 @@ public class Server {
 			byte[] planeModelInByte = Serialize.serialize(modelPlaneLocal);
 			outToClient.writeInt(planeModelInByte.length); //
 			outToClient.write(planeModelInByte);
-			addPlane(modelPlaneLocal);
+			modelPlaneList.add(modelPlaneLocal);
 			
 //			while ((i = inFromClient.readInt()) != 0) {
 //				i = inFromClient.readInt();
@@ -91,9 +103,6 @@ public class Server {
 			
 			cNumber++;
 		}
-	}
-	public static synchronized void addPlane(PlaneModel modelPlaneLocal){
-		modelPlaneList.add(modelPlaneLocal);
 	}
 	
 }
