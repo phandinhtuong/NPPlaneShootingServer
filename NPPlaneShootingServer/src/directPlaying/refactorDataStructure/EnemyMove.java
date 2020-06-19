@@ -20,12 +20,12 @@ public class EnemyMove {
 				
 				if (Server.modelEnemyList.get(Server.modelEnemyList.indexOf(enemyModel)).getStatus()
 						.equals("dead")) {
-					ServerUI.displayGameLog("Server.modelEnemyList.size() before = "+Server.modelEnemyList.size());
+//					ServerUI.displayGameLog("Server.modelEnemyList.size() before = "+Server.modelEnemyList.size());
 					synchronized (Server.modelEnemyList) {
 						Server.modelEnemyList.remove(Server.modelEnemyList.indexOf(enemyModel));
 					}
 					
-					ServerUI.displayGameLog("Server.modelEnemyList.size() after = "+Server.modelEnemyList.size());
+//					ServerUI.displayGameLog("Server.modelEnemyList.size() after = "+Server.modelEnemyList.size());
 					((Timer) evt.getSource()).stop();
 					return;
 				} else {
