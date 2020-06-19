@@ -10,13 +10,14 @@ import java.util.List;
 
 import objectByteTransform.Serialize;
 import testOneClient.EnemyModel;
+import testOneClient.EnemyNumber;
 import testOneClient.MissileModel;
 import testOneClient.PlaneModel;
 
 public class Server {
 	static int numberOfPlayers = 3;
-	static int numberOfMissile = 100; //number of missile for each player
-	static int numberOfEnemyPlane = 100; //number of enemies for each player
+//	static int numberOfMissiles = 100; //number of missile for each player
+	static int numberOfEnemies = 100; //number of enemies for each player
 	
 //	static ArrayList<PlaneModel> modelPlaneList = new ArrayList<PlaneModel>();
 ////	public static PlaneModel modelPlaneList[] = new PlaneModel[numberOfPlayers];
@@ -39,6 +40,8 @@ public class Server {
 	
 //	public static EnemyModel enemyModelList[][] = new EnemyModel[numberOfPlayers][numberOfEnemyPlane];
 	public static List<EnemyModel> modelEnemyList = Collections.synchronizedList(new ArrayList<EnemyModel>());
+	
+	public static List<EnemyNumber> enemyListOfAllPlayers = new ArrayList<EnemyNumber>();
 	
 	public static void main(String[] args) throws Exception {
 		int tcp_port = 6789;

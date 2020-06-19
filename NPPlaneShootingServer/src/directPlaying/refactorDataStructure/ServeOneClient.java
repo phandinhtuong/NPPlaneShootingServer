@@ -36,6 +36,7 @@ public class ServeOneClient extends Thread {
 	public void run() {
 		int i = 0;
 		try {
+			
 			CreateEnemy.createEnemy(cNumber);
 			while ((i = inFromClient.readInt()) != 0) {
 				switch (i) {
@@ -80,6 +81,10 @@ public class ServeOneClient extends Thread {
 					
 					MissileMove.missileMove(missileModelFromClient);
 					i = 0;
+					break;
+				case 3: 
+					outToClient.writeInt(checkVictory()); 
+					i = 0; 
 					break;
 				case 4:
 					byte[] planeModelListInByte = Serialize
@@ -128,16 +133,22 @@ public class ServeOneClient extends Thread {
 		}
 		return -1;
 	}
+	private static int checkVictory(){
+		int count = 0;
+		for (int i = 0; i<Server.enemyListOfAllPlayers.size();i++){
+			if (Server.enemyListOfAllPlayers.get(i).getEnemyID() == Server.numberOfEnemies){
+				count++;
+			}
+		}
+		if (count == Server.enemyListOfAllPlayers.size() && Server.modelEnemyList.size()==0) return 1;
+		else return 2;
+//		return Server.enemyListOfAllPlayers.get(0).getEnemyID();
+//		return count;
+//		return Server.enemyListOfAllPlayers.size();
+	}
 	
 	
 	
-
-	
-
-	
-
-	
-
 	
 
 }
