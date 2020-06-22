@@ -222,9 +222,11 @@ public class ServeOneClient extends Thread {
 							Main.modelRoomList.get(roomIDInRoomList)
 									.getPlayerListInRoom(), cNumber);
 					// set ready state
-					Main.modelRoomList.get(roomIDInRoomList)
-							.getPlayerListInRoom()
-							.get(playerIDInPlayerListInRoom).setStatus("ready");
+					synchronized (Main.modelRoomList) {
+						Main.modelRoomList.get(roomIDInRoomList)
+						.getPlayerListInRoom()
+						.get(playerIDInPlayerListInRoom).setStatus("ready");
+					}
 					break;
 				case 13: // start game
 					// set this player status to playing
