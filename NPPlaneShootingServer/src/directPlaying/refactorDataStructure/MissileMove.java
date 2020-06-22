@@ -68,19 +68,22 @@ public class MissileMove {
 							|| (enemyPlaneListIndexDie != -1)) {
 						// missile kills enemy
 						if (enemyPlaneListIndexDie != -1) {
-							Server.modelMissileList.get(
-									Server.modelMissileList
-											.indexOf(missileModel)).setStatus(
-									"dead");
+							//add one score to plane
+							addOneScoreToPlane(missileModel.getPlayerID());
+							
+							//update the enemy to dead
 							Server.modelEnemyList.get(enemyPlaneListIndexDie)
 									.setStatus("dead");
+							//display log
 							ServerUI.displayGameLog("missileIndex = "
-									+ missileModel.getID()
+									+ missileModel.getID() +" of player "+missileModel.getPlayerID()
 									+ " destroyed enemyPlaneListIndex = "
 									+ enemyPlaneListIndexDie);
+							//set dead enemy index to -1
 							enemyPlaneListIndexDie = -1;
 						}
 						// ServerUI.displayGameLog("missile dead");
+						//update this missile to dead
 						Server.modelMissileList.get(
 								Server.modelMissileList.indexOf(missileModel))
 								.setStatus("dead");
@@ -129,5 +132,12 @@ public class MissileMove {
 			return true;
 		else
 			return false;
+	}
+	public static void addOneScoreToPlane(int playerID){
+		synchronized (Server.modelPlaneList) {
+			for (int i=0;i<Server.modelPlaneList.size();i++){
+				if (Server.modelPlaneList.get(i).getID()==playerID) Server.modelPlaneList.get(i).addOneScore();
+			}
+		}
 	}
 }

@@ -78,7 +78,8 @@ public class ServeOneClient extends Thread {
 					}
 					
 					
-					
+//					synchronized /(missileModelFromClient) {
+//					}
 					MissileMove.missileMove(missileModelFromClient);
 					i = 0;
 					break;

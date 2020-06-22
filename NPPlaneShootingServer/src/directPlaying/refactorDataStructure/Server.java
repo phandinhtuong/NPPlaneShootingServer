@@ -77,7 +77,7 @@ public class Server {
 			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 //			int i = 0;
 			
-			PlaneModel modelPlaneLocal = new PlaneModel(cNumber, 500, 500, "playing"); //Initialize client local plane
+			PlaneModel modelPlaneLocal = new PlaneModel(cNumber, 500, 500, "playing",0); //Initialize client local plane
 			
 			
 			

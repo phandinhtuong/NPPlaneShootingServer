@@ -11,11 +11,13 @@ public class PlaneModel implements Serializable{
 	String status;
 	int x;
 	int y;
-	public PlaneModel(int ID, int x, int y, String status){
+	int score;
+	public PlaneModel(int ID, int x, int y, String status, int score){
 		this.ID = ID;
 		this.status = status;
 		this.x = x;
 		this.y = y;
+		this.score = score;
 	}
 	public int getID() {
 		return ID;
@@ -44,5 +46,13 @@ public class PlaneModel implements Serializable{
 	public void setY(int y) {
 		this.y = y;
 	}
-	
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public void addOneScore(){
+		this.score++;
+	}
 }

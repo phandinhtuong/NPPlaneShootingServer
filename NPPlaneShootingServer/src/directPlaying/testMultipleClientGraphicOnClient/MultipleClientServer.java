@@ -21,7 +21,7 @@ public class MultipleClientServer {
 		ServerSocket welcomeSocket = new ServerSocket(tcp_port);
 		int cNumber = 0;
 		for (int j = 0; j<numberOfPlayers;j++){
-			planeModelList[j] = new PlaneModel(j,500, 500, "waiting");
+			planeModelList[j] = new PlaneModel(j,500, 500, "waiting",0);
 			for (int i = 0; i < numberOfMissile; i++) {
 				missileModelList[j][i] = new MissileModel(0, 0, 0, 0, "ready");
 				enemyModelList[j][i] = new EnemyModel(0, 0, 0,0, "ready");
