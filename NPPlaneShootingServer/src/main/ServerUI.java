@@ -1,5 +1,6 @@
-package directPlaying.testMultipleClientGraphicOnServer;
+package main;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 
@@ -7,8 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
-
-import java.awt.Color;
 
 public class ServerUI {
 
@@ -40,26 +39,24 @@ public class ServerUI {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	static JTextArea gameLog = new JTextArea(""); // display game log
+	// display game log
+	static JTextArea gameLog = new JTextArea(""); 
 	private void initialize() {
 		frmPlaneShootingServer = new JFrame();
 		//frmPlaneShootingServer.setBackground(Color.WHITE);
 		frmPlaneShootingServer.getContentPane().setBackground(Color.WHITE);
 		frmPlaneShootingServer.setTitle("Plane Shooting Server");
-		frmPlaneShootingServer.setBounds(100, 100, 975, 648);
+		frmPlaneShootingServer.setBounds(950, 100, 975, 648);
 		frmPlaneShootingServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameLog.setBackground(Color.WHITE);
 		
 		gameLog.setOpaque(false);
-		//gameLog.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		// frame.setCursor(frame.getToolkit().createCustomCursor(
-		// new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB),
-		// new Point(0, 0), "null"));
-		// game log
 		gameLog.setEditable(false);
 		gameLog.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		 DefaultCaret caret = (DefaultCaret)gameLog.getCaret();
 		 caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		 
+		 //scroll pane to display game log
 		JScrollPane scrollPaneGameLog = new JScrollPane();
 		scrollPaneGameLog.setViewportView(gameLog);
 		scrollPaneGameLog.setBounds(0, 0, 951, 498);
@@ -69,7 +66,7 @@ public class ServerUI {
 		frmPlaneShootingServer.getContentPane().add(scrollPaneGameLog);
 		frmPlaneShootingServer.setVisible(true);
 	}
-	public static void displayGameLog(String s) {
+	public void displayGameLog(String s) {
 		gameLog.setText(gameLog.getText() + s + "\n");
 	}
 

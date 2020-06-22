@@ -2,26 +2,21 @@ package model;
 
 import java.io.Serializable;
 
-public class Player  implements Serializable{
+public class Player implements Serializable{ //Player is also a plane
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String playerID;
+	int ID;
 	String status;
-	public Player(String playerID){
-		this.playerID = playerID;
-		this.status = "idle";
+	int x;
+	int y;
+	int score;
+	public int getID() {
+		return ID;
 	}
-	public void updatePlayerStatus(String status){
-		this.status=status;
-	}
-	public String getPlayerID() {
-		return playerID;
-	}
-
-	public void setPlayerID(String playerID) {
-		this.playerID = playerID;
+	public void setID(int iD) {
+		ID = iD;
 	}
 	public String getStatus() {
 		return status;
@@ -29,8 +24,34 @@ public class Player  implements Serializable{
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public Player(int iD, String status, int x, int y, int score) {
+		super();
+		ID = iD;
+		this.status = status;
+		this.x = x;
+		this.y = y;
+		this.score = score;
+	}
+	public void addOneScore(){
+		this.score++;
 	}
 	
 }

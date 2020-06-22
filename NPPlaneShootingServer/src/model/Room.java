@@ -1,60 +1,76 @@
 package model;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-
-public class Room  implements Serializable{
+public class Room implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String roomID;
-	Player hostPlayer;
-	List<Player> playerList;
-	
-	public boolean add(Player arg0) {
-		return playerList.add(arg0);
-	}
-	public void updatePlayer(Player player){
-		//TODO
-		//System.out.println(this.playerList.indexOf(player));
-		//this.playerList.get(this.playerList.indexOf(player)).setStatus(player.getStatus());
-		int i = 0;
-		for(i=0;i<playerList.size();i++){
-			if (playerList.get(i).getPlayerID().equals(player.getPlayerID())){
-				playerList.get(i).setStatus(player.getStatus());
-				break;
-			}
-		}
-	}
-	
-	public Room(String roomID,Player hostPlayer){
-		this.playerList = new ArrayList<Player>();
-		this.playerList.add(hostPlayer);
-		this.hostPlayer = hostPlayer;
-		this.roomID = roomID;
-	}
-	public Player getHostPlayer() {
-		return hostPlayer;
-	}
-	public void setHostPlayer(Player hostPlayer) {
-		this.hostPlayer = hostPlayer;
-	}
-	public List<Player> getPlayerList() {
-		return playerList;
-	}
-
-	public void setPlayerList(List<Player> playerList) {
-		this.playerList = playerList;
-	}
-	public String getRoomID() {
+	int roomID;
+	String roomName;
+	int hostPlayerID;
+	List<Player> playerListInRoom;
+	List<Missile> missileList;
+	List<Enemy> enemyList;
+	String status;
+	public int getRoomID() {
 		return roomID;
 	}
-	public void setRoomID(String roomID) {
+	public void setRoomID(int roomID) {
 		this.roomID = roomID;
 	}
-
+	public String getRoomName() {
+		return roomName;
+	}
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
+	public int getHostPlayerID() {
+		return hostPlayerID;
+	}
+	public void setHostPlayerID(int hostPlayerID) {
+		this.hostPlayerID = hostPlayerID;
+	}
+	public List<Player> getPlayerListInRoom() {
+		return playerListInRoom;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	
+	public List<Missile> getMissileList() {
+		return missileList;
+	}
+	public void setMissileList(List<Missile> missileList) {
+		this.missileList = missileList;
+	}
+	public void setPlayerListInRoom(List<Player> playerListInRoom) {
+		this.playerListInRoom = playerListInRoom;
+	}
+	
+	public List<Enemy> getEnemyList() {
+		return enemyList;
+	}
+	public void setEnemyList(List<Enemy> enemyList) {
+		this.enemyList = enemyList;
+	}
+	public Room(int roomID, String roomName, int hostPlayerID,
+			List<Player> playerListInRoom, List<Missile> missileList,
+			List<Enemy> enemyList, String status) {
+		super();
+		this.roomID = roomID;
+		this.roomName = roomName;
+		this.hostPlayerID = hostPlayerID;
+		this.playerListInRoom = playerListInRoom;
+		this.missileList = missileList;
+		this.enemyList = enemyList;
+		this.status = status;
+	}
 	
 }

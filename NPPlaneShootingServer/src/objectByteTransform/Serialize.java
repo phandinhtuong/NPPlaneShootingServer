@@ -3,22 +3,18 @@ package objectByteTransform;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.List;
 
-import directPlaying.refactorDataStructure.Server;
-import directPlaying.testOneClient.EnemyModel;
-import directPlaying.testOneClient.MissileModel;
-import directPlaying.testOneClient.PlaneModel;
+import main.Main;
 import model.Player;
 import model.Room;
-import model.RoomList;
 
 public class Serialize {
-	public static byte[] serialize(RoomList roomList) throws IOException{
+	public static byte[] serialize(List<Player> playerList) throws IOException{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 	    ObjectOutputStream os = new ObjectOutputStream(out);
-	    os.writeObject(roomList);
-		return out.toByteArray();
+	    os.writeObject(playerList);
+	    return out.toByteArray();
 	}
 	public static byte[] serialize(Room room) throws IOException{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -32,7 +28,7 @@ public class Serialize {
 	    os.writeObject(player);
 	    return out.toByteArray();
 	}
-	public static byte[] serialize(PlaneModel[] planeModelList)
+	public static byte[] serialize(Player[] planeModelList)
 			throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ObjectOutputStream os = new ObjectOutputStream(out);
@@ -40,73 +36,48 @@ public class Serialize {
 		return out.toByteArray();
 	}
 
-	public static byte[] serialize(PlaneModel planeModel) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(planeModel);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(MissileModel missileModel)
-			throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(missileModel);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(MissileModel[][] missileModelList)
-			throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(missileModelList);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(EnemyModel enemyModel) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(enemyModel);
-		return out.toByteArray();
-	}
-
-	public static byte[] serialize(EnemyModel[][] enemyModelList)
-			throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(out);
-		os.writeObject(enemyModelList);
-		return out.toByteArray();
-	}
-	public static byte[] serializePlaneModelList(){
+	public static byte[] serializePlaneModelList(int roomIDInRoomList){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
-			synchronized (Server.modelPlaneList) {
-				os.writeObject(Server.modelPlaneList);
+			synchronized (Main.modelRoomList.get(roomIDInRoomList).getPlayerListInRoom()) {
+				os.writeObject(Main.modelRoomList.get(roomIDInRoomList).getPlayerListInRoom());
 			}
 			return out.toByteArray();
 		} catch (IOException e) {
 			return null;
 		}
 	}
-	public static byte[] serializeMissileModelList(){
+	public static byte[] serializeMissileModelList(int roomIDInRoomList){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
-			synchronized (Server.modelMissileList) {
-				os.writeObject(Server.modelMissileList);
+			synchronized (Main.modelRoomList.get(roomIDInRoomList).getMissileList()) {
+				os.writeObject(Main.modelRoomList.get(roomIDInRoomList).getMissileList());
 			}
 			return out.toByteArray();
 		} catch (IOException e) {
 			return null;
 		}
 	}
-	public static byte[] serializeEnemyModelList(){
+	public static byte[] serializeEnemyModelList(int roomIDInRoomList){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
-			synchronized (Server.modelEnemyList) {
-				os.writeObject(Server.modelEnemyList);
+			synchronized (Main.modelRoomList.get(roomIDInRoomList).getEnemyList()) {
+				os.writeObject(Main.modelRoomList.get(roomIDInRoomList).getEnemyList());
+			}
+			return out.toByteArray();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+	public static byte[] serializeRoomModelList(){
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(out);
+			synchronized (Main.modelRoomList) {
+				os.writeObject(Main.modelRoomList);
 			}
 			return out.toByteArray();
 		} catch (IOException e) {
