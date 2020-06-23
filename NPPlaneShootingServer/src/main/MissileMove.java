@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -48,7 +49,7 @@ public class MissileMove {
 					// break;
 					// }
 					enemyPlaneListIndexDie = checkCollisionListMissileEnemies(
-							missileX, missileY, 26, 26);
+							missileX, missileY, 26, 26,roomIDInRoomList);
 					if (count == 1080 || missileY < 15
 							|| (enemyPlaneListIndexDie != -1)) {
 						// missile kills enemy
@@ -57,8 +58,8 @@ public class MissileMove {
 							addOneScoreToPlane(missileModel.getPlayerID(),roomIDInRoomList);
 							
 							//update the enemy to dead
-//							Main.modelEnemyList.get(enemyPlaneListIndexDie)
-//									.setStatus("dead");
+							Main.modelRoomList.get(roomIDInRoomList).getEnemyList().get(enemyPlaneListIndexDie)
+									.setStatus("dead");
 							//display log
 							//set dead enemy index to -1
 							enemyPlaneListIndexDie = -1;
@@ -92,28 +93,28 @@ public class MissileMove {
 	}
 
 	public static int checkCollisionListMissileEnemies(int x, int y, int width,
-			int height) {
+			int height,int roomIDInRoomList) {
 
-//		for (int i = 0; i < Main.modelEnemyList.size(); i++) {
-//			if (checkOneCollisionMissileEnemy(x, y, width, height, i)) {
-//				return i;
-//			}
-//
-//		}
+		for (int i = 0; i < Main.modelRoomList.get(roomIDInRoomList).getEnemyList().size(); i++) {
+			if (checkOneCollisionMissileEnemy(x, y, width, height, i,roomIDInRoomList)) {
+				return i;
+			}
+
+		}
 		return -1;
 	}
 
-//	public static boolean checkOneCollisionMissileEnemy(int x, int y,
-//			int width, int height, int enemyListIndex) {
-//		Rectangle a = new Rectangle(x, y, width, height);
-//		Rectangle b = new Rectangle(Main.modelEnemyList.get(enemyListIndex)
-//				.getX(), Main.modelEnemyList.get(enemyListIndex).getY(),
-//				ServeOneClient.enemyWidth, ServeOneClient.enemyHeight);
-//		if (a.intersects(b))
-//			return true;
-//		else
-//			return false;
-//	}
+	public static boolean checkOneCollisionMissileEnemy(int x, int y,
+			int width, int height, int enemyListIndex,int roomIDInRoomList) {
+		Rectangle a = new Rectangle(x, y, width, height);
+		Rectangle b = new Rectangle(Main.modelRoomList.get(roomIDInRoomList).getEnemyList().get(enemyListIndex)
+				.getX(), Main.modelRoomList.get(roomIDInRoomList).getEnemyList().get(enemyListIndex).getY(),
+				ServeOneClient.enemyWidth, ServeOneClient.enemyHeight);
+		if (a.intersects(b))
+			return true;
+		else
+			return false;
+	}
 	public static void addOneScoreToPlane(int playerID, int roomID){
 		synchronized (Main.modelRoomList.get(roomID).getPlayerListInRoom()) {
 			for (int i=0;i<Main.modelRoomList.get(roomID).getPlayerListInRoom().size();i++){
