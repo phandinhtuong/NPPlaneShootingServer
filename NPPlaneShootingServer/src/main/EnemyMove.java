@@ -76,10 +76,15 @@ public class EnemyMove {
 	public static boolean checkOneCollisionEnemyPlane(int x, int y, int width,
 			int height, int playerIndex,int roomID) {
 		Rectangle a = new Rectangle(x, y, width, height);
+//		Rectangle b = new Rectangle(Main.modelRoomList.get(roomID).getPlayerListInRoom().get(
+//				ServeOneClient.indexOfPlaneWithIDPlayerListInRoom(Main.modelRoomList.get(roomID).getPlayerListInRoom(), playerIndex)).getX(),
+//				Main.modelRoomList.get(roomID).getPlayerListInRoom().get(
+//						ServeOneClient.indexOfPlaneWithIDPlayerListInRoom(Main.modelRoomList.get(roomID).getPlayerListInRoom(), playerIndex)).getY(),
+//				ServeOneClient.planeWidth, ServeOneClient.planeHeight);
 		Rectangle b = new Rectangle(Main.modelRoomList.get(roomID).getPlayerListInRoom().get(
-				ServeOneClient.indexOfPlaneWithIDPlayerListInRoom(Main.modelRoomList.get(roomID).getPlayerListInRoom(), playerIndex)).getX(),
+				playerIndex).getX(),
 				Main.modelRoomList.get(roomID).getPlayerListInRoom().get(
-						ServeOneClient.indexOfPlaneWithIDPlayerListInRoom(Main.modelRoomList.get(roomID).getPlayerListInRoom(), playerIndex)).getY(),
+						playerIndex).getY(),
 				ServeOneClient.planeWidth, ServeOneClient.planeHeight);
 		if (a.intersects(b))
 			return true;

@@ -92,7 +92,8 @@ public class ServeOneClient extends Thread {
 								.getMissileList().add(missileModelFromClient);
 					}
 
-					MissileMove.missileMove(missileModelFromClient, roomIDInRoomList);
+					MissileMove.missileMove(missileModelFromClient,
+							roomIDInRoomList);
 
 					break;
 				case 3:
@@ -108,10 +109,10 @@ public class ServeOneClient extends Thread {
 							.serializePlaneModelList(roomIDInRoomList);
 					outToClient.writeInt(planeModelListInByte.length);
 					outToClient.write(planeModelListInByte);
-
+//					Main.ser.displayGameLog("player loading data");
 					break;
 				case 5:// load all missiles
-					// get room ID
+						// get room ID
 					roomID = inFromClient.readInt();
 					roomIDInRoomList = indexOfRoomWithID(roomID);
 					byte[] missileModelListInByte = Serialize
@@ -120,8 +121,8 @@ public class ServeOneClient extends Thread {
 					outToClient.write(missileModelListInByte);
 
 					break;
-				case 6://load all enemies
-					// get room ID
+				case 6:// load all enemies
+						// get room ID
 					roomID = inFromClient.readInt();
 					roomIDInRoomList = indexOfRoomWithID(roomID);
 					byte[] enemyModelListInByte = Serialize
@@ -146,7 +147,8 @@ public class ServeOneClient extends Thread {
 					Main.ser.displayGameLog("max room id = " + getMaxRoomID());
 					int maxRoomID = getMaxRoomID();
 					Room room = new Room(maxRoomID + 1, "room", cNumber,
-							modelPlaneListInRoom,modelMissileListInRoom,modelEnemyListInRoom, "waiting");
+							modelPlaneListInRoom, modelMissileListInRoom,
+							modelEnemyListInRoom, "waiting");
 					synchronized (Main.modelRoomList) {
 						Main.modelRoomList.add(room);
 					}
@@ -158,22 +160,28 @@ public class ServeOneClient extends Thread {
 					// get room ID
 					roomID = inFromClient.readInt();
 					roomIDInRoomList = indexOfRoomWithID(roomID);
-					// Main.ser.displayGameLog("roomIDInRoomList "+roomIDInRoomList);
-					Main.ser.displayGameLog("roomIDInRoomList "
-							+ roomIDInRoomList);
-					// set waiting state
-					Main.modelPlaneListOutsideRoom.get(
-							indexOfPlaneWithIDInOutsideList(cNumber))
-							.setStatus("waiting");
-					// add player to player list of room
-					Main.modelRoomList
-							.get(roomIDInRoomList)
-							.getPlayerListInRoom()
-							.add(Main.modelPlaneListOutsideRoom
-									.get(indexOfPlaneWithIDInOutsideList(cNumber)));
-					// remove player from outside list
-					Main.modelPlaneListOutsideRoom
-							.remove(indexOfPlaneWithIDInOutsideList(cNumber));
+					if (Main.modelRoomList.get(roomIDInRoomList).getStatus()
+							.equals("playing")) {
+						outToClient.writeInt(0);
+					} else {
+						outToClient.writeInt(1);
+						Main.ser.displayGameLog("roomIDInRoomList "
+								+ roomIDInRoomList);
+						// set waiting state
+						Main.modelPlaneListOutsideRoom.get(
+								indexOfPlaneWithIDInOutsideList(cNumber))
+								.setStatus("waiting");
+						// add player to player list of room
+						Main.modelRoomList
+								.get(roomIDInRoomList)
+								.getPlayerListInRoom()
+								.add(Main.modelPlaneListOutsideRoom
+										.get(indexOfPlaneWithIDInOutsideList(cNumber)));
+						// remove player from outside list
+						Main.modelPlaneListOutsideRoom
+								.remove(indexOfPlaneWithIDInOutsideList(cNumber));
+					}
+
 					break;
 				case 10:// remove player from room
 					// get room ID
@@ -199,13 +207,20 @@ public class ServeOneClient extends Thread {
 					Main.modelRoomList.get(roomIDInRoomList)
 							.getPlayerListInRoom()
 							.remove(playerIDInPlayerListInRoom);
+					//if there is no player in room
+					if(Main.modelRoomList
+							.get(roomIDInRoomList)
+							.getPlayerListInRoom().size()==0){
+						Main.modelRoomList
+						.get(roomIDInRoomList).setStatus("waiting");
+					}
 					break;
 				case 11: // load all players in room
 					// get room ID
 					roomID = inFromClient.readInt();
 					Main.ser.displayGameLog("roomID " + roomID);
-					synchronized (Main.modelRoomList.get(
-									indexOfRoomWithID(roomID))) {
+					synchronized (Main.modelRoomList
+							.get(indexOfRoomWithID(roomID))) {
 						byte[] playerListInRoomInByte = Serialize
 								.serialize(Main.modelRoomList.get(
 										indexOfRoomWithID(roomID))
@@ -224,8 +239,9 @@ public class ServeOneClient extends Thread {
 					// set ready state
 					synchronized (Main.modelRoomList) {
 						Main.modelRoomList.get(roomIDInRoomList)
-						.getPlayerListInRoom()
-						.get(playerIDInPlayerListInRoom).setStatus("ready");
+								.getPlayerListInRoom()
+								.get(playerIDInPlayerListInRoom)
+								.setStatus("ready");
 					}
 					break;
 				case 13: // start game
@@ -240,9 +256,23 @@ public class ServeOneClient extends Thread {
 							.getPlayerListInRoom()
 							.get(playerIDInPlayerListInRoom)
 							.setStatus("playing");
-					CreateEnemy.createEnemy(cNumber,roomIDInRoomList);
+					Main.modelRoomList.get(roomIDInRoomList).setStatus(
+							"playing");
+					CreateEnemy.createEnemy(cNumber, roomIDInRoomList);
 					break;
-					
+				case 14:// player quit game // lose
+					roomID = inFromClient.readInt();
+					roomIDInRoomList = indexOfRoomWithID(roomID);
+					Main.modelRoomList
+							.get(roomIDInRoomList)
+							.getPlayerListInRoom()
+							.get(indexOfPlaneWithIDPlayerListInRoom(
+									Main.modelRoomList.get(roomIDInRoomList)
+											.getPlayerListInRoom(), cNumber))
+							.setStatus("dead");
+					break;
+				case 15:
+
 				default:
 					break;
 				}

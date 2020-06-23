@@ -25,6 +25,10 @@ public class CreateEnemy {
 			int count = 0;
 
 			public void actionPerformed(ActionEvent evt) {
+				//if this player quit the game
+				if (ServeOneClient.indexOfPlaneWithIDPlayerListInRoom(Main.modelRoomList.get(roomIDInRoomList).getPlayerListInRoom(), cNumber)==-1){
+					((Timer) evt.getSource()).stop();
+				}
 				// if the number of enemy = count or this plane is dead => stop
 				if (count == Main.numberOfEnemiesEachPlayer
 						|| Main.modelRoomList.get(roomIDInRoomList).getPlayerListInRoom()
