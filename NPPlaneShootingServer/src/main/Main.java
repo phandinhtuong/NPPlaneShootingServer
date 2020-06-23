@@ -17,7 +17,7 @@ public class Main {
 	// number of players in one room
 	static int numberOfPlayersInOneRoom = 3;
 	// number of enemies each player
-	static int numberOfEnemiesEachPlayer = 10;
+	static int numberOfEnemiesEachPlayer = 1000;
 	// enemy index of all players in one room
 	static int enemyIndexOfAllPlayers = 0;
 

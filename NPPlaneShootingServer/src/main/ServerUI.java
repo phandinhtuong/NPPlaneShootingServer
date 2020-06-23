@@ -52,7 +52,7 @@ public class ServerUI {
 		
 		gameLog.setOpaque(false);
 		gameLog.setEditable(false);
-		gameLog.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		gameLog.setFont(new Font("Times New Roman", Font.PLAIN, 30));
 		 DefaultCaret caret = (DefaultCaret)gameLog.getCaret();
 		 caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		 

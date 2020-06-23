@@ -10,7 +10,7 @@ import model.Missile;
 
 public class MissileMove {
 	public static void missileMove(final Missile missileModel, final int roomIDInRoomList) {
-		int delay = 100;
+		int delay = 50;
 		Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
 				Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel)).setStatus(
 				"launched");
@@ -27,65 +27,79 @@ public class MissileMove {
 			int k = 0;
 
 			public void actionPerformed(ActionEvent evt) {
-				if (Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
-						Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
-						.getStatus().equals("dead")) {
-					synchronized (Main.modelRoomList.get(roomIDInRoomList).getMissileList()) {
-						Main.modelRoomList.get(roomIDInRoomList).getMissileList().remove(Main.modelRoomList.get(roomIDInRoomList).getMissileList()
-								.indexOf(missileModel));
+				if (roomIDInRoomList < Main.modelRoomList.size()){
+					//if this is not a new list
+					if(Main.modelRoomList.get(roomIDInRoomList).getMissileList().size()!=0&&Main.modelRoomList.get(roomIDInRoomList).getMissileList().size()!=0){
+						if (Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
+								Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
+								.getStatus().equals("dead")) {
+							synchronized (Main.modelRoomList.get(roomIDInRoomList).getMissileList()) {
+								Main.modelRoomList.get(roomIDInRoomList).getMissileList().remove(Main.modelRoomList.get(roomIDInRoomList).getMissileList()
+										.indexOf(missileModel));
+							}
+							
+							((Timer) evt.getSource()).stop();
+							return;
+						} else {
+							// y change with speed
+							missileY = missileY - 15;
+							// TODO
+							// for (k = 0; k < Server.numberOfPlayers; k++) {
+							// enemyPlaneListIndexDie =
+							// checkCollisionListMissileEnemies(
+							// missileX, missileY, 26, 26, k);
+							// if (enemyPlaneListIndexDie != -1)
+							// break;
+							// }
+							enemyPlaneListIndexDie = checkCollisionListMissileEnemies(
+									missileX, missileY, 26, 26,roomIDInRoomList);
+							if (count == 1080 || missileY < 15
+									|| (enemyPlaneListIndexDie != -1)) {
+								// missile kills enemy
+								if (enemyPlaneListIndexDie != -1) {
+									//add one score to plane
+									addOneScoreToPlane(missileModel.getPlayerID(),roomIDInRoomList);
+//									Main.ser.displayGameLog("one score added");
+									//update the enemy to dead
+									Main.modelRoomList.get(roomIDInRoomList).getEnemyList().get(enemyPlaneListIndexDie)
+											.setStatus("dead");
+									//display log
+									//set dead enemy index to -1
+									enemyPlaneListIndexDie = -1;
+								}
+								// ServerUI.displayGameLog("missile dead");
+								//update this missile to dead
+								Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
+										Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
+										.setStatus("dead");
+								// Server.missileModelList.remove(Server.missileModelList.indexOf(missileModel));
+								// ((Timer) evt.getSource()).stop();
+								// return;
+							} else {
+								// ServerUI.displayGameLog("missile moving");
+								Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
+										Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
+										.setStatus("moving");
+								Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
+										Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
+										.setX(missileX);
+								Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
+										Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
+										.setY(missileY);
+							}
+							count++;
+						}
+					}else{
+						((Timer) evt.getSource()).stop();
+						return;
 					}
-					
+//					Main.ser.displayGameLog("missile moving");
+				}else{
 					((Timer) evt.getSource()).stop();
 					return;
-				} else {
-					// y change with speed
-					missileY = missileY - 2 * count;
-					// TODO
-					// for (k = 0; k < Server.numberOfPlayers; k++) {
-					// enemyPlaneListIndexDie =
-					// checkCollisionListMissileEnemies(
-					// missileX, missileY, 26, 26, k);
-					// if (enemyPlaneListIndexDie != -1)
-					// break;
-					// }
-					enemyPlaneListIndexDie = checkCollisionListMissileEnemies(
-							missileX, missileY, 26, 26,roomIDInRoomList);
-					if (count == 1080 || missileY < 15
-							|| (enemyPlaneListIndexDie != -1)) {
-						// missile kills enemy
-						if (enemyPlaneListIndexDie != -1) {
-							//add one score to plane
-							addOneScoreToPlane(missileModel.getPlayerID(),roomIDInRoomList);
-							
-							//update the enemy to dead
-							Main.modelRoomList.get(roomIDInRoomList).getEnemyList().get(enemyPlaneListIndexDie)
-									.setStatus("dead");
-							//display log
-							//set dead enemy index to -1
-							enemyPlaneListIndexDie = -1;
-						}
-						// ServerUI.displayGameLog("missile dead");
-						//update this missile to dead
-						Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
-								Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
-								.setStatus("dead");
-						// Server.missileModelList.remove(Server.missileModelList.indexOf(missileModel));
-						// ((Timer) evt.getSource()).stop();
-						// return;
-					} else {
-						// ServerUI.displayGameLog("missile moving");
-						Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
-								Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
-								.setStatus("moving");
-						Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
-								Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
-								.setX(missileX);
-						Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
-								Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
-								.setY(missileY);
-					}
-					count++;
 				}
+				
+				
 			}
 		};
 		Timer t = new Timer(delay, taskPerformer);

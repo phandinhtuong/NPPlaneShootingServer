@@ -9,7 +9,7 @@ import javax.swing.Timer;
 import model.Enemy;
 
 public class EnemyMove {
-	public static void enemyMove(final Enemy enemyModel, final int roomID) {
+	public static void enemyMove(final Enemy enemyModel, final int roomID,final int cNumber,final int speed) {
 		int delay = 50;
 		ActionListener taskPerformer = new ActionListener() {
 			int count = 0;
@@ -17,44 +17,65 @@ public class EnemyMove {
 			int k = -1;
 
 			public void actionPerformed(ActionEvent evt) {
-				
-				if (Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).getStatus()
-						.equals("dead")) {
-//					ServerUI.displayGameLog("Server.modelEnemyList.size() before = "+Server.modelEnemyList.size());
-					synchronized (Main.modelRoomList.get(roomID).getEnemyList()) {
-						Main.modelRoomList.get(roomID).getEnemyList().remove(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel));
+				if (roomID < Main.modelRoomList.size()){
+					//if this player quit the game
+					if (ServeOneClient.indexOfPlaneWithIDPlayerListInRoom(Main.modelRoomList.get(roomID).getPlayerListInRoom(), cNumber)==-1){
+						((Timer) evt.getSource()).stop();
+						return;
 					}
-					
-//					ServerUI.displayGameLog("Server.modelEnemyList.size() after = "+Server.modelEnemyList.size());
+					//if this is not a new list
+					if(Main.modelRoomList.get(roomID).getEnemyList().size()!=0){
+						if (Main.modelRoomList
+								.get(roomID)
+								.getEnemyList()
+								.get(Main.modelRoomList.get(roomID).getEnemyList()
+										.indexOf(enemyModel)).getStatus()
+								.equals("dead")) {
+//							ServerUI.displayGameLog("Server.modelEnemyList.size() before = "+Server.modelEnemyList.size());
+							synchronized (Main.modelRoomList.get(roomID).getEnemyList()) {
+								Main.modelRoomList.get(roomID).getEnemyList().remove(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel));
+							}
+							
+//							ServerUI.displayGameLog("Server.modelEnemyList.size() after = "+Server.modelEnemyList.size());
+							((Timer) evt.getSource()).stop();
+							return;
+						} else {
+							enemyPlaneY = speed * count - ServeOneClient.enemyHeight;// speed
+							if ((k = checkCollisionListEnemyPlanes(
+									Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).getX(),
+									enemyPlaneY, ServeOneClient.enemyWidth,
+									ServeOneClient.enemyHeight,roomID)) != -1) {
+								// update dead player
+								Main.modelRoomList.get(roomID).getPlayerListInRoom().get(k)
+										.setStatus("dead");
+								// ServerUI.displayGameLog("Player "+cNumber+" died!");
+								//update enemy dead
+								Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setStatus("dead");
+//								((Timer) evt.getSource()).stop();
+//								return;
+
+							}
+							if (enemyPlaneY >= ServeOneClient.clientFrameHeight) {
+
+								Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setStatus("dead");
+//								((Timer) evt.getSource()).stop();
+//								return;
+							} else {
+								Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setStatus("moving");
+								Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setY(enemyPlaneY);
+							}
+							count++;
+						}
+					}else{
+						((Timer) evt.getSource()).stop();
+						return;
+					}
+				}else{
 					((Timer) evt.getSource()).stop();
 					return;
-				} else {
-					enemyPlaneY = 5 * count - ServeOneClient.enemyHeight;// speed
-					if ((k = checkCollisionListEnemyPlanes(
-							Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).getX(),
-							enemyPlaneY, ServeOneClient.enemyWidth,
-							ServeOneClient.enemyHeight,roomID)) != -1) {
-						// update dead player
-						Main.modelRoomList.get(roomID).getPlayerListInRoom().get(k)
-								.setStatus("dead");
-						// ServerUI.displayGameLog("Player "+cNumber+" died!");
-						//update enemy dead
-						Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setStatus("dead");
-//						((Timer) evt.getSource()).stop();
-//						return;
-
-					}
-					if (enemyPlaneY >= ServeOneClient.clientFrameHeight) {
-
-						Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setStatus("dead");
-//						((Timer) evt.getSource()).stop();
-//						return;
-					} else {
-						Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setStatus("moving");
-						Main.modelRoomList.get(roomID).getEnemyList().get(Main.modelRoomList.get(roomID).getEnemyList().indexOf(enemyModel)).setY(enemyPlaneY);
-					}
-					count++;
 				}
+				
+//				Main.ser.displayGameLog("enemy moving");
 			}
 		};
 		Timer t = new Timer(delay, taskPerformer);
