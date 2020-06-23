@@ -11,12 +11,13 @@ import java.util.List;
 import model.Player;
 import model.Room;
 import objectByteTransform.Serialize;
+import serveOneClient.ServeOneClient;
 
 public class Main {
 	// number of players in one room
-	static int numberOfPlayersInOneRoom = 3;
+	public static int numberOfPlayersInOneRoom = 3;
 	// number of enemies each player
-	static int numberOfEnemiesEachPlayer = 1000;
+	public static int numberOfEnemiesEachPlayer = 1000;
 	// enemy index of all players in one room
 	static int enemyIndexOfAllPlayers = 0;
 
@@ -28,7 +29,7 @@ public class Main {
 	public static List<Player> modelPlayerListOutsideRoom = Collections
 			.synchronizedList(new ArrayList<Player>());
 	// server UI
-	static ServerUI ser = new ServerUI();
+	public static ServerUI ser = new ServerUI();
 	public static void main(String[] args) throws Exception {
 		int tcp_port = 6789;
 		@SuppressWarnings("resource")

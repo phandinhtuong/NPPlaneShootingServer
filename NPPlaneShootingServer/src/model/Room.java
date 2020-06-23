@@ -9,7 +9,7 @@ public class Room implements Serializable{
 	int roomID;
 	String roomName;
 	int hostPlayerID;
-	List<Player> playerListInRoom;
+	List<Player> playerList;
 	List<Missile> missileList;
 	List<Enemy> enemyList;
 	String status;
@@ -32,7 +32,7 @@ public class Room implements Serializable{
 		this.hostPlayerID = hostPlayerID;
 	}
 	public List<Player> getPlayerListInRoom() {
-		return playerListInRoom;
+		return playerList;
 	}
 	public String getStatus() {
 		return status;
@@ -51,7 +51,7 @@ public class Room implements Serializable{
 		this.missileList = missileList;
 	}
 	public void setPlayerListInRoom(List<Player> playerListInRoom) {
-		this.playerListInRoom = playerListInRoom;
+		this.playerList = playerListInRoom;
 	}
 	
 	public List<Enemy> getEnemyList() {
@@ -67,7 +67,7 @@ public class Room implements Serializable{
 		this.roomID = roomID;
 		this.roomName = roomName;
 		this.hostPlayerID = hostPlayerID;
-		this.playerListInRoom = playerListInRoom;
+		this.playerList = playerListInRoom;
 		this.missileList = missileList;
 		this.enemyList = enemyList;
 		this.status = status;

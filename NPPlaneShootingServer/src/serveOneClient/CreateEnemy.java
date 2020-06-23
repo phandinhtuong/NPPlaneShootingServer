@@ -1,10 +1,11 @@
-package main;
+package serveOneClient;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import main.Main;
 import model.Enemy;
 
 public class CreateEnemy {

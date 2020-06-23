@@ -1,4 +1,4 @@
-package main;
+package serveOneClient;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import main.Main;
 import model.Enemy;
 import model.Missile;
 import model.Player;
