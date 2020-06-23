@@ -13,7 +13,6 @@ import model.Room;
 import objectByteTransform.Serialize;
 
 public class Main {
-	// static RoomList roomList = new RoomList();
 	// number of players in one room
 	static int numberOfPlayersInOneRoom = 3;
 	// number of enemies each player

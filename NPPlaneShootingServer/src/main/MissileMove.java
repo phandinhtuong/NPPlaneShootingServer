@@ -24,7 +24,6 @@ public class MissileMove {
 			int missileY = Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
 					Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel)).getY();
 			int enemyPlaneListIndexDie = -1; // dead enemy index
-			int k = 0;
 
 			public void actionPerformed(ActionEvent evt) {
 				if (roomIDInRoomList < Main.modelRoomList.size()){
@@ -43,14 +42,7 @@ public class MissileMove {
 						} else {
 							// y change with speed
 							missileY = missileY - 15;
-							// TODO
-							// for (k = 0; k < Server.numberOfPlayers; k++) {
-							// enemyPlaneListIndexDie =
-							// checkCollisionListMissileEnemies(
-							// missileX, missileY, 26, 26, k);
-							// if (enemyPlaneListIndexDie != -1)
-							// break;
-							// }
+							//check if this missile collides any enemy in enemy list
 							enemyPlaneListIndexDie = checkCollisionListMissileEnemies(
 									missileX, missileY, 26, 26,roomIDInRoomList);
 							if (count == 1080 || missileY < 15
@@ -59,7 +51,6 @@ public class MissileMove {
 								if (enemyPlaneListIndexDie != -1) {
 									//add one score to plane
 									addOneScoreToPlane(missileModel.getPlayerID(),roomIDInRoomList);
-//									Main.ser.displayGameLog("one score added");
 									//update the enemy to dead
 									Main.modelRoomList.get(roomIDInRoomList).getEnemyList().get(enemyPlaneListIndexDie)
 											.setStatus("dead");
@@ -67,16 +58,11 @@ public class MissileMove {
 									//set dead enemy index to -1
 									enemyPlaneListIndexDie = -1;
 								}
-								// ServerUI.displayGameLog("missile dead");
 								//update this missile to dead
 								Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
 										Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
 										.setStatus("dead");
-								// Server.missileModelList.remove(Server.missileModelList.indexOf(missileModel));
-								// ((Timer) evt.getSource()).stop();
-								// return;
 							} else {
-								// ServerUI.displayGameLog("missile moving");
 								Main.modelRoomList.get(roomIDInRoomList).getMissileList().get(
 										Main.modelRoomList.get(roomIDInRoomList).getMissileList().indexOf(missileModel))
 										.setStatus("moving");
@@ -93,7 +79,6 @@ public class MissileMove {
 						((Timer) evt.getSource()).stop();
 						return;
 					}
-//					Main.ser.displayGameLog("missile moving");
 				}else{
 					((Timer) evt.getSource()).stop();
 					return;

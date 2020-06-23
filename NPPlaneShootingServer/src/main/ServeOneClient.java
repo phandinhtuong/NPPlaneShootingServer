@@ -35,15 +35,12 @@ public class ServeOneClient extends Thread {
 	static int planeHeight = 84;
 	static int enemyWidth = 58;
 	static int enemyHeight = 57;
-//	int numberOfEnemyPlane = 100;
 	static int clientFrameWidth = 930;
 	static int clientFrameHeight = 992;
 
 	public void run() {
 		int i = 0;
 		try {
-
-			// CreateEnemy.createEnemy(cNumber);
 			while ((i = inFromClient.readInt()) != 0) {
 				switch (i) {
 				case 1: // move plane
@@ -72,11 +69,6 @@ public class ServeOneClient extends Thread {
 								.setY(planeModelFromClient.getY());
 					}
 
-					// Server.modelPlaneList[planeModelFromClient.getID()]
-					// .setX(planeModelFromClient.getX());
-					// Server.modelPlaneList[planeModelFromClient.getID()]
-					// .setY(planeModelFromClient.getY());
-
 					break;
 				case 2://launch missile
 					// get room ID
@@ -98,7 +90,6 @@ public class ServeOneClient extends Thread {
 
 					break;
 				case 3://check victory
-					// outToClient.writeInt(checkVictory());
 
 					break;
 				case 4: // load all players
@@ -110,7 +101,6 @@ public class ServeOneClient extends Thread {
 							.serializePlaneModelList(roomIDInRoomList);
 					outToClient.writeInt(planeModelListInByte.length);
 					outToClient.write(planeModelListInByte);
-					// Main.ser.displayGameLog("player loading data");
 					break;
 				case 5:// load all missiles
 						// get room ID
@@ -134,15 +124,6 @@ public class ServeOneClient extends Thread {
 					break;
 				case 7: // load all rooms
 					synchronized (Main.modelRoomList) {
-						// if there is no player in room, delete room
-
-						// Main.ser.displayGameLog("Main.modelRoomList.size() = "+Main.modelRoomList.size());
-//						Iterator<Room> it = Main.modelRoomList.iterator();
-//						while(it.hasNext()){
-//							Room r = it.next();
-//							if (r.getPlayerListInRoom().size()==0) it.remove();
-//						}
-						
 						byte[] roomListInByte = Serialize
 								.serializeRoomModelList();
 						outToClient.writeInt(roomListInByte.length);
@@ -158,7 +139,6 @@ public class ServeOneClient extends Thread {
 							.synchronizedList(new ArrayList<Missile>());
 					List<Enemy> modelEnemyListInRoom = Collections
 							.synchronizedList(new ArrayList<Enemy>());
-//					Main.ser.displayGameLog("max room id = " + getMaxRoomID());
 					int maxRoomID = getMaxRoomID();
 					Room room = new Room(maxRoomID + 1, "room", cNumber,
 							modelPlaneListInRoom, modelMissileListInRoom,
@@ -213,10 +193,6 @@ public class ServeOneClient extends Thread {
 					playerIDInPlayerListInRoom = indexOfPlaneWithIDPlayerListInRoom(
 							Main.modelRoomList.get(roomIDInRoomList)
 									.getPlayerListInRoom(), cNumber);
-//					Main.ser.displayGameLog("case 10: roomIDInRoomList "
-//							+ roomIDInRoomList);
-//					Main.ser.displayGameLog("case 10: playerIDInPlayerListInRoom "
-//							+ playerIDInPlayerListInRoom);
 					// set outside state
 					Main.modelRoomList.get(roomIDInRoomList)
 							.getPlayerListInRoom()
@@ -231,11 +207,6 @@ public class ServeOneClient extends Thread {
 							.getPlayerListInRoom()
 							.remove(playerIDInPlayerListInRoom);
 					Main.ser.displayGameLog("Player "+cNumber+" exited Room "+roomIDInRoomList);
-//					synchronized (Main.modelRoomList) {
-//						if (Main.modelRoomList.get(roomIDInRoomList).getPlayerListInRoom().size()==0){
-//							Main.modelRoomList.remove(roomIDInRoomList);
-//						}
-//					}
 					break;
 				case 11: // load all players in room
 					// get room ID
@@ -259,7 +230,6 @@ public class ServeOneClient extends Thread {
 						}
 					}
 					
-
 					break;
 				case 12:// set ready state
 					// get room ID
@@ -347,13 +317,6 @@ public class ServeOneClient extends Thread {
 			removePlayerInRoomWithPlayerID(cNumber);
 			Main.ser.displayGameLog("connection to client " + cNumber
 					+ " closed.");
-			// Server.modelPlaneList[cNumber].setStatus("disconnected");
-			// Main.modelPlaneList.get(indexOfPlaneWithID(cNumber)).setStatus("disconnected");
-//			try {
-//				connectionSocket.close();
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
 		}
 	}
 
@@ -414,29 +377,8 @@ public class ServeOneClient extends Thread {
 		return max;
 	}
 
+	@SuppressWarnings("unused")
 	private static int checkVictory() {
-		// int count = 0;
-		// for (int i = 0; i<Server.enemyListOfAllPlayers.size();i++){
-		// if (Server.enemyListOfAllPlayers.get(i).getEnemyID() ==
-		// Server.numberOfEnemiesEachPlayer){
-		// count++;
-		// }
-		// }
-		// if (count == Server.enemyListOfAllPlayers.size() &&
-		// Server.modelEnemyList.size()==0) return 1;
-		// else return 2;
-		// if (Main.enemyIndexOfAllPlayers == Main.modelPlaneList.size() *
-		// Main.numberOfEnemiesEachPlayer && Main.modelEnemyList.size()==0){
-		// return -1;
-		// } else return Main.modelPlaneList.size() *
-		// Main.numberOfEnemiesEachPlayer - Main.enemyIndexOfAllPlayers +
-		// Main.modelEnemyList.size();
-		// for (int i = 0;i<Server.enemyListOfAllPlayers.size();i++){
-		//
-		// }
-		// return Server.enemyListOfAllPlayers.get(0).getEnemyID();
-		// return count;
-		// return Server.enemyListOfAllPlayers.size();
 		return 8;
 	}
 
