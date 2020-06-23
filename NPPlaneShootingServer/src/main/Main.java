@@ -26,7 +26,7 @@ public class Main {
 			.synchronizedList(new ArrayList<Room>());
 
 	// players not in any room list
-	public static List<Player> modelPlaneListOutsideRoom = Collections
+	public static List<Player> modelPlayerListOutsideRoom = Collections
 			.synchronizedList(new ArrayList<Player>());
 	// server UI
 	static ServerUI ser = new ServerUI();
@@ -38,15 +38,16 @@ public class Main {
 		int cNumber = 0;
 
 		while (true) {
-			ser.displayGameLog("TCP Server port: " + tcp_port);
+//			ser.displayGameLog("TCP Server port: " + tcp_port);
 			Socket connectionSocket = welcomeSocket.accept(); // accept
 																// connection
 																// from client
-			ser.displayGameLog("cNumber = " + cNumber);
+//			ser.displayGameLog("cNumber = " + cNumber);
 
-			ser.displayGameLog("client connect from: "
+			ser.displayGameLog("New connection from : "
 					+ connectionSocket.getInetAddress().getHostAddress() + ":"
 					+ connectionSocket.getPort());
+			ser.displayGameLog("PlayerID : "+cNumber);
 			DataInputStream inFromClient = new DataInputStream(
 					connectionSocket.getInputStream());
 			DataOutputStream outToClient = new DataOutputStream(
@@ -58,7 +59,7 @@ public class Main {
 			byte[] planeModelInByte = Serialize.serialize(modelPlaneLocal);
 			outToClient.writeInt(planeModelInByte.length); //
 			outToClient.write(planeModelInByte);
-			modelPlaneListOutsideRoom.add(modelPlaneLocal);
+			modelPlayerListOutsideRoom.add(modelPlaneLocal);
 
 			ServeOneClient serveOneClient = new ServeOneClient(
 					connectionSocket, cNumber, inFromClient, outToClient);

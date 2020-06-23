@@ -68,8 +68,8 @@ public class CreateEnemy {
 						speed = count / 10;
 						speed = (speed + 1);
 //						speed = (speed + 1) * 2;
-						Main.ser.displayGameLog("speed = " + speed);
-						Main.ser.displayGameLog("ID = " + count);
+//						Main.ser.displayGameLog("speed = " + speed);
+//						Main.ser.displayGameLog("ID = " + count);
 						if(speed%2==0){ // only create enemy when speed is even
 							// new enemy
 							enemyModel = new Enemy(
